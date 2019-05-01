@@ -24,6 +24,7 @@ module Warwick.Tabula.Types (
 
 import Data.String
 import Data.Aeson
+import Data.Aeson.Types
 import qualified Data.ByteString as BS
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.Text as T
@@ -38,8 +39,12 @@ import Warwick.Tabula.JSON
 
 --------------------------------------------------------------------------------
 
-class HasPayload a where
+class FromJSON a => HasPayload a where
+    -- | `payloadFieldName` @proxy@ retrieves the payload filename.
     payloadFieldName :: Proxy a -> T.Text
+
+    payload :: Object -> Parser a
+    payload v = v .: payloadFieldName (Proxy :: Proxy a)
 
 newtype ObjectList a = ObjectList { getList :: [a] }
 

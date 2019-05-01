@@ -25,6 +25,7 @@ import Warwick.Tabula.StudentAssignment
 --------------------------------------------------------------------------------
 
 listAssignments :: BasicAuthData -> ModuleCode -> Maybe AcademicYear -> ClientM (TabulaResponse [Assignment])
+retrieveAssignment :: BasicAuthData -> ModuleCode -> UUID -> Maybe String -> ClientM (TabulaResponse Assignment)
 listSubmissions :: BasicAuthData -> ModuleCode -> UUID -> ClientM (TabulaResponse (HM.HashMap String (Maybe Submission)))
 
 uploadAttachment :: BasicAuthData -> Maybe String -> BS.ByteString -> ClientM (TabulaResponse Attachment)
@@ -39,6 +40,7 @@ personAssignments :: BasicAuthData -> String -> ClientM TabulaAssignmentResponse
 courseworkAPI :<|> memberAPI = client tabula
 
 listAssignments :<|>
+    retrieveAssignment :<|>
     listSubmissions :<|>
     uploadAttachment :<|>
     retrieveJob = courseworkAPI

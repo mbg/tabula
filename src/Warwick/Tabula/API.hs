@@ -44,7 +44,7 @@ instance (HasPayload a, FromJSON a) => FromJSON (TabulaResponse a) where
         s <- v .: "success"
         if s
         then TabulaOK <$> v .: "status"
-                      <*> v .: payloadFieldName (Proxy :: Proxy a)
+                      <*> payload v
         else fail "200 OK, but success is not true (this should not happen)"
 
 instance FromJSON TabulaAssignmentResponse where
@@ -59,6 +59,7 @@ type TabulaAuth = BasicAuth "" ()
 
 type CourseworkAPI =
       TabulaAuth :> "module" :> Capture "moduleCode" ModuleCode :> "assignments" :> QueryParam "academicYear" String :> Get '[JSON] (TabulaResponse [Assignment])
+ :<|> TabulaAuth :> "module" :> Capture "moduleCode" ModuleCode :> "assignments" :> Capture "assignmentID" UUID :> QueryParam "filter" String :> Get '[JSON] (TabulaResponse Assignment)
  :<|> TabulaAuth :> "module" :> Capture "moduleCode" ModuleCode :> "assignments" :> Capture "assignmentId" UUID :> "submissions" :> Get '[JSON] (TabulaResponse (HM.HashMap String (Maybe Submission)))
  :<|> TabulaAuth :> "attachments" :> QueryParam "filename" String :> ReqBody '[OctetStream] BS.ByteString :> Post '[JSON] (TabulaResponse Attachment)
  :<|> TabulaAuth :> "job" :> Capture "jobID" UUID :> Get '[JSON] (TabulaResponse JobInstance)

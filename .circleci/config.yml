@@ -20,6 +20,7 @@ jobs:
           key: tabula-{{ checksum "package.yaml" }}
           paths:
             - ".stack-work"
+            - "~/.stack"
       #- store_artifacts: # upload build artifact for display in CircleCI
       #    path: ~/.local/bin/circleci-demo-haskell-exe
       #    destination: circleci-demo-haskell-exe

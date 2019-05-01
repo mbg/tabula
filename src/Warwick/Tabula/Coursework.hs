@@ -9,6 +9,42 @@ import qualified Data.HashMap.Lazy as HM
 import Warwick.Tabula.Types
 import Warwick.Tabula.Attachment
 
+-- | Represents an entry in a list of users who are registered for an
+-- assignment on Tabula.
+data StudentMember = StudentMember {
+    smUserName :: String,
+    smUserID   :: String
+} deriving Show
+
+instance FromJSON StudentMember where
+    parseJSON = withObject "StudentMembership" $ \v ->
+        StudentMember <$> v .: "userId"
+                      <*> v .: "universityId"
+
+-- | Represents a list of users who are registered for an assignment.
+data StudentMembership = StudentMembership {
+    -- | The total number of students linked to the assignment.
+    smTotal :: Int,
+    -- | The number of students linked to SITS assessment groups.
+    smLinkedSITS :: Int,
+    -- | The number of extra students added to the assignment and not linked to
+    -- SITS.
+    smIncluded :: Int,
+    -- | The number of students who have been manually removed from the
+    -- membership of the assignment.
+    smExcluded :: Int,
+    -- | The list of users who are registered for the assignment.
+    smUsers    :: [StudentMember]
+} deriving Show
+
+instance FromJSON StudentMembership where
+    parseJSON = withObject "StudentMembership" $ \v ->
+        StudentMembership <$> v .: "total"
+                          <*> v .: "linkedSits"
+                          <*> v .: "included"
+                          <*> v .: "excluded"
+                          <*> v .: "users"
+
 data Assignment = Assignment {
     assignmentID :: AssignmentID,
     assignmentArchived :: Bool,
@@ -34,7 +70,7 @@ data Assignment = Assignment {
     assignmentWordCountConventions :: Maybe String,
     assignmentSubmissions :: Maybe Int,
     assignmentUnapprovedExtensions :: Int,
-    --assignmentStudentMembership :: (),
+    assignmentStudentMembership :: StudentMembership,
     --assignmentSitsLinks :: [()],
     assignmentOpenEnded :: Bool,
     assignmentOpened :: Bool,
@@ -48,6 +84,9 @@ data Assignment = Assignment {
 
 instance HasPayload [Assignment] where
     payloadFieldName _ = "assignments"
+
+instance HasPayload Assignment where
+    payloadFieldName _ = "assignment"
 
 instance FromJSON Assignment where
     parseJSON = parseTabulaJSON

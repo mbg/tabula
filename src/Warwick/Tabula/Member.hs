@@ -10,6 +10,7 @@ module Warwick.Tabula.Member where
 import Data.Aeson
 
 import Warwick.Tabula.Types
+import Warwick.Tabula.Payload.StudentCourseDetails
 
 --------------------------------------------------------------------------------
 
@@ -41,8 +42,9 @@ data Member = Member {
     -- TODO: some private details fields here
     memberGroupName        :: Maybe String,
     -- TODO: some more fields here
-    memberInactivationDate :: Maybe TabulaDate
+    memberInactivationDate :: Maybe TabulaDate,
     -- TODO: some more fields here
+    memberStudentCourseDetails :: Maybe [StudentCourseDetails]
 }
 
 instance FromJSON Member where
@@ -64,6 +66,7 @@ instance FromJSON Member where
                <*> v .:? "phoneNumber"
                <*> v .:? "groupName"
                <*> v .:? "inactivationDate"
+               <*> v .:? "studentCourseDetails"
 
 instance HasPayload Member where
     payloadFieldName _ = "member"

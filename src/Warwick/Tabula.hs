@@ -22,6 +22,7 @@ module Warwick.Tabula (
     withTabula,
 
     listAssignments,
+    retrieveAssignment,
     listSubmissions,
 
     TabulaDownloadCallbacks(..),
@@ -133,6 +134,13 @@ listAssignments ::
 listAssignments mc yr = do
     authData <- tabulaAuthData
     handle $ I.listAssignments authData mc yr
+
+retrieveAssignment ::
+    ModuleCode -> AssignmentID -> [String] -> Tabula (TabulaResponse Assignment)
+retrieveAssignment mc aid xs = do
+    let fdata = if Prelude.null xs then Nothing else Just (intercalate "," xs)
+    authData <- tabulaAuthData
+    handle $ I.retrieveAssignment authData mc (unAssignmentID aid) fdata
 
 listSubmissions ::
     ModuleCode -> AssignmentID -> Tabula (TabulaResponse (HM.HashMap String (Maybe Submission)))

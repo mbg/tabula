@@ -32,17 +32,17 @@ import Warwick.Tabula.Coursework
 buildDownloadURL :: BaseUrl
                  -> ModuleCode
                  -> AssignmentID
-                 -> Submission
+                 -> String
                  -> FilePath
                  -> String
-buildDownloadURL url mc aid sub fn = concat
+buildDownloadURL url mc aid subid fn = concat
     [ baseUrlPath url
     , "/module/"
     , C8.unpack (moduleCode mc)
     , "/assignments/"
     , C8.unpack (toASCIIBytes $ unAssignmentID aid)
     , "/submissions/"
-    , (submissionID sub)
+    , subid
     , "/"
     , fn
     ]
@@ -50,15 +50,15 @@ buildDownloadURL url mc aid sub fn = concat
 downloadSubmission :: String
                    -> ModuleCode
                    -> AssignmentID
-                   -> Submission
+                   -> String
                    -> FilePath
                    -> FilePath
                    -> Tabula ()
-downloadSubmission sid mc aid sub fn out = do
+downloadSubmission sid mc aid subid fn out = do
     manager            <- tabulaManager
     baseURL            <- tabulaURL
     BasicAuthData {..} <- tabulaAuthData
-    req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid sub fn)
+    req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid subid fn)
     let
         request
             = applyBasicAuth basicAuthUsername basicAuthPassword
@@ -83,16 +83,16 @@ data TabulaDownloadCallbacks a = Callbacks {
 downloadSubmissionWithCallbacks :: String
                    -> ModuleCode
                    -> AssignmentID
-                   -> Submission
+                   -> String
                    -> FilePath
                    -> FilePath
                    -> TabulaDownloadCallbacks a
                    -> Tabula ()
-downloadSubmissionWithCallbacks sid mc aid sub fn out (Callbacks {..}) = do
+downloadSubmissionWithCallbacks sid mc aid subid fn out (Callbacks {..}) = do
     manager            <- tabulaManager
     baseURL            <- tabulaURL
     BasicAuthData {..} <- tabulaAuthData
-    req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid sub fn)
+    req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid subid fn)
     let
         request
             = applyBasicAuth basicAuthUsername basicAuthPassword
