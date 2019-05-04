@@ -76,7 +76,7 @@ data Assignment = Assignment {
     assignmentOpened :: Bool,
     assignmentClosed :: Bool,
     assignmentOpenDate :: TabulaDateTime,
-    assignmentCloseDate :: TabulaDateTime,
+    assignmentCloseDate :: Maybe TabulaDateTime,
     assignmentFeedbackDeadline :: Maybe TabulaDate,
     assignmentFeedback :: Int,
     assignmentUnpublishedFeedback :: Int
