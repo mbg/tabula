@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fe31cb724c2d7e488c19e74e9655424d5b26f919bf8ce3e342020a5ef2d0039b
+-- hash: b3680a7424879593284d3bd04325a123cc381e742fa343f8fd0b4b4097c2ca12
 
 name:           tabula
 version:        0.1.0.0
@@ -14,7 +14,7 @@ homepage:       https://github.com/mbg/tabula#readme
 bug-reports:    https://github.com/mbg/tabula/issues
 author:         Michael B. Gale
 maintainer:     m.gale@warwick.ac.uk
-copyright:      2018 Michael B. Gale
+copyright:      2019 Michael B. Gale
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
@@ -44,6 +44,7 @@ library
       Warwick.Tabula.Payload.Holiday
       Warwick.Tabula.Payload.StudentCourseDetails
       Warwick.Tabula.Payload.Term
+      Warwick.Tabula.Payload.Week
       Warwick.Tabula.Relationship
       Warwick.Tabula.StudentAssignment
       Warwick.Tabula.TabulaSession

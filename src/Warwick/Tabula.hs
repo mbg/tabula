@@ -35,6 +35,8 @@ module Warwick.Tabula (
     
     retrieveTermDates,
     retrieveTermDatesFor,
+    retrieveTermWeeks,
+    retrieveTermWeeksFor,
     retrieveHolidays
 ) where
 
@@ -182,6 +184,32 @@ retrieveTermDates = handle I.retrieveTermDates
 retrieveTermDatesFor :: Text -> Tabula (TabulaResponse [Term])
 retrieveTermDatesFor academicYear =
     handle $ I.retrieveTermDatesFor academicYear
+
+-- | `retrieveTermWeeks` @numberingSystem@ retrieves information
+-- about the weeks in the current academic year. The week's names
+-- are determined by the specified @numberingSystem@. If no value
+-- is specified, the API defaults to `AcademicNumbering`.
+--
+-- >>> retrieveTermWeeksFor (Just TermNumbering)
+-- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
+--
+retrieveTermWeeks :: 
+    Maybe NumberingSystem -> Tabula (TabulaResponse [Week])
+retrieveTermWeeks numberingSystem =
+    handle $ I.retrieveTermWeeks numberingSystem
+
+-- | `retrieveTermWeeksFor` @academicYear numberingSystem@ retrieves 
+-- information about the weeks in @academicYear@. The week's names
+-- are determined by the specified @numberingSystem@. If no value
+-- is specified, the API defaults to `AcademicNumbering`.
+--
+-- >>> retrieveTermWeeksFor "2019" (Just TermNumbering)
+-- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
+--
+retrieveTermWeeksFor :: 
+    Text -> Maybe NumberingSystem -> Tabula (TabulaResponse [Week])
+retrieveTermWeeksFor academicYear numberingSystem =
+    handle $ I.retrieveTermWeeksFor academicYear numberingSystem
 
 -- | `retrieveHolidays` retrieves information about holiday dates.
 retrieveHolidays :: Tabula (TabulaResponse [Holiday])

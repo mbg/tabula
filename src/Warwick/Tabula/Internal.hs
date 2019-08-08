@@ -58,11 +58,22 @@ retrieveTermDatesFor ::
     Text -> 
     ClientM (TabulaResponse [Term])
 
+retrieveTermWeeks ::
+    Maybe NumberingSystem ->
+    ClientM (TabulaResponse [Week])
+
+retrieveTermWeeksFor ::
+    Text ->
+    Maybe NumberingSystem ->
+    ClientM (TabulaResponse [Week])
+
 retrieveHolidays ::
     ClientM (TabulaResponse [Holiday])
 
 retrieveTermDates :<|>
     retrieveTermDatesFor :<|>
+    retrieveTermWeeks :<|>
+    retrieveTermWeeksFor :<|>
     retrieveHolidays = timetableAPI
 
 --------------------------------------------------------------------------------

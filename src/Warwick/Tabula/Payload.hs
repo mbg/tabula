@@ -14,5 +14,6 @@ import Warwick.Tabula.Payload.CourseDetails as Payload
 import Warwick.Tabula.Payload.Holiday as Payload
 import Warwick.Tabula.Payload.StudentCourseDetails as Payload
 import Warwick.Tabula.Payload.Term as Payload
+import Warwick.Tabula.Payload.Week as Payload
 
 --------------------------------------------------------------------------------

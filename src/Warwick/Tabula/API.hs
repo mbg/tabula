@@ -116,6 +116,15 @@ type TimetableAPI =
  :<|> "termdates" :> 
       Capture "academicYear" Text :> 
       Get '[JSON] (TabulaResponse [Term])
+ :<|> "termdates" :> 
+      "weeks" :>
+      QueryParam "numberingSystem" NumberingSystem :>
+      Get '[JSON] (TabulaResponse [Week])
+ :<|> "termdates" :> 
+      Capture "academicYear" Text :> 
+      "weeks" :>
+      QueryParam "numberingSystem" NumberingSystem :>
+      Get '[JSON] (TabulaResponse [Week])
  :<|> "holidaydates" :>
       Get '[JSON] (TabulaResponse [Holiday])
 
