@@ -19,9 +19,9 @@ import Warwick.Tabula.Attachment
 import Warwick.Tabula.Coursework
 import Warwick.Tabula.Job
 import Warwick.Tabula.Member
+import Warwick.Tabula.Payload
 import Warwick.Tabula.Relationship
 import Warwick.Tabula.StudentAssignment
-import Warwick.Tabula.Payload.Term
 
 --------------------------------------------------------------------------------
 
@@ -51,10 +51,13 @@ retrieveMember :<|>
     personAssignments = memberAPI
 
 retrieveTermDates ::
-    BasicAuthData -> 
     Maybe String -> 
     ClientM (TabulaResponse [Term])
 
-retrieveTermDates = timetableAPI
+retrieveHolidays ::
+    ClientM (TabulaResponse [Holiday])
+
+retrieveTermDates :<|>
+    retrieveHolidays = timetableAPI
 
 --------------------------------------------------------------------------------

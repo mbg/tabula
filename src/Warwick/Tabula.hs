@@ -33,7 +33,8 @@ module Warwick.Tabula (
     listRelationships,
     personAssignments,
     
-    retrieveTermDates
+    retrieveTermDates,
+    retrieveHolidays
 ) where
 
 --------------------------------------------------------------------------------
@@ -68,8 +69,8 @@ import Warwick.Tabula.Types
 import Warwick.Tabula.Error
 import Warwick.Tabula.Coursework
 import Warwick.Tabula.Member
+import Warwick.Tabula.Payload
 import Warwick.Tabula.Relationship
-import Warwick.Tabula.Payload.Term
 import Warwick.Tabula.API
 import qualified Warwick.Tabula.Internal as I
 
@@ -168,8 +169,11 @@ personAssignments uid = do
 --
 retrieveTermDates ::
     Maybe String -> Tabula (TabulaResponse [Term])
-retrieveTermDates academicYear = do
-    authData <- tabulaAuthData
-    handle $ I.retrieveTermDates authData academicYear
+retrieveTermDates academicYear =
+    handle $ I.retrieveTermDates academicYear
+
+-- | `retrieveHolidays` retrieves information about holiday dates.
+retrieveHolidays :: Tabula (TabulaResponse [Holiday])
+retrieveHolidays = handle I.retrieveHolidays 
 
 -------------------------------------------------------------------------------

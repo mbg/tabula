@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0a76442c6bd953ee17f367eb8db440985ff58048542cb822fc7981140c6c3b2a
+-- hash: fe31cb724c2d7e488c19e74e9655424d5b26f919bf8ce3e342020a5ef2d0039b
 
 name:           tabula
 version:        0.1.0.0
@@ -41,6 +41,7 @@ library
       Warwick.Tabula.Member
       Warwick.Tabula.Payload
       Warwick.Tabula.Payload.CourseDetails
+      Warwick.Tabula.Payload.Holiday
       Warwick.Tabula.Payload.StudentCourseDetails
       Warwick.Tabula.Payload.Term
       Warwick.Tabula.Relationship
