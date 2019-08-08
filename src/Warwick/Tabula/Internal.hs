@@ -21,6 +21,7 @@ import Warwick.Tabula.Job
 import Warwick.Tabula.Member
 import Warwick.Tabula.Relationship
 import Warwick.Tabula.StudentAssignment
+import Warwick.Tabula.Payload.Term
 
 --------------------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ listRelationships :: BasicAuthData -> String -> ClientM (TabulaResponse [Relatio
 personAssignments :: BasicAuthData -> String -> ClientM TabulaAssignmentResponse
 
 
-courseworkAPI :<|> memberAPI = client tabula
+courseworkAPI :<|> memberAPI :<|> timetableAPI = client tabula
 
 listAssignments :<|>
     retrieveAssignment :<|>
@@ -48,5 +49,12 @@ listAssignments :<|>
 retrieveMember :<|>
     listRelationships :<|>
     personAssignments = memberAPI
+
+retrieveTermDates ::
+    BasicAuthData -> 
+    Maybe String -> 
+    ClientM (TabulaResponse [Term])
+
+retrieveTermDates = timetableAPI
 
 --------------------------------------------------------------------------------

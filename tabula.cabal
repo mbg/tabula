@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2fc8c9950b017940b4039ece9a5ea928318b1a0098f3c901d734f870f400269b
+-- hash: 0a76442c6bd953ee17f367eb8db440985ff58048542cb822fc7981140c6c3b2a
 
 name:           tabula
 version:        0.1.0.0
@@ -42,6 +42,7 @@ library
       Warwick.Tabula.Payload
       Warwick.Tabula.Payload.CourseDetails
       Warwick.Tabula.Payload.StudentCourseDetails
+      Warwick.Tabula.Payload.Term
       Warwick.Tabula.Relationship
       Warwick.Tabula.StudentAssignment
       Warwick.Tabula.TabulaSession

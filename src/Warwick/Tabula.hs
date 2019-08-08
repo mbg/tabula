@@ -31,7 +31,9 @@ module Warwick.Tabula (
 
     retrieveMember,
     listRelationships,
-    personAssignments
+    personAssignments,
+    
+    retrieveTermDates
 ) where
 
 --------------------------------------------------------------------------------
@@ -67,6 +69,7 @@ import Warwick.Tabula.Error
 import Warwick.Tabula.Coursework
 import Warwick.Tabula.Member
 import Warwick.Tabula.Relationship
+import Warwick.Tabula.Payload.Term
 import Warwick.Tabula.API
 import qualified Warwick.Tabula.Internal as I
 
@@ -152,5 +155,21 @@ personAssignments uid = do
            Nothing -> throwM e
            Just r  -> return r
        _                    -> throwM e
+
+-------------------------------------------------------------------------------
+
+-- | `retrieveTermDates` @academicYear@ retrieves information about an academic
+-- year's terms. By default, information for the current academic year is
+-- returned, but the academic year can be specified with @academicYear@ and 
+-- should be the four character year in which the academic year starts.
+--
+-- >>> retrieveTermDates (Just "2019")
+-- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
+--
+retrieveTermDates ::
+    Maybe String -> Tabula (TabulaResponse [Term])
+retrieveTermDates academicYear = do
+    authData <- tabulaAuthData
+    handle $ I.retrieveTermDates authData academicYear
 
 -------------------------------------------------------------------------------

@@ -21,6 +21,10 @@ instance ToJSON TabulaDateTime where
 newtype TabulaDate = TabulaDate { getDate :: UTCTime }
     deriving Show
 
+-- TODO: maybe this should only format the date component?
+instance ToJSON TabulaDate where 
+    toJSON (TabulaDate time) = String (T.pack $ formatISO8601 time)
+
 instance FromJSON TabulaDate where
     parseJSON = withText "ISO8601 date format" $
         \str -> case parseTimeM True defaultTimeLocale "%F" (T.unpack str) of

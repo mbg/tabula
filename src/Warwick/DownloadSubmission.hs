@@ -63,7 +63,6 @@ downloadSubmission sid mc aid subid fn out = do
         request
             = applyBasicAuth basicAuthUsername basicAuthPassword
             $ setRequestMethod "GET"
-            -- $ setRequestPath url
             $ setRequestSecure True
             $ setRequestPort (baseUrlPort baseURL)
             $ setRequestHost (BS.packChars $ baseUrlHost baseURL)
@@ -97,7 +96,6 @@ downloadSubmissionWithCallbacks sid mc aid subid fn out (Callbacks {..}) = do
         request
             = applyBasicAuth basicAuthUsername basicAuthPassword
             $ setRequestMethod "GET"
-            -- $ setRequestPath url
             $ setRequestSecure True
             $ setRequestPort (baseUrlPort baseURL)
             $ setRequestHost (BS.packChars $ baseUrlHost baseURL)

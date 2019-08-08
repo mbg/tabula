@@ -23,6 +23,7 @@ import Warwick.Tabula.Job
 import Warwick.Tabula.Member
 import Warwick.Tabula.Relationship
 import Warwick.Tabula.StudentAssignment
+import Warwick.Tabula.Payload.Term
 
 --------------------------------------------------------------------------------
 
@@ -69,7 +70,16 @@ type TabulaMemberAPI =
  :<|> TabulaAuth :> "member" :> Capture "userID" String :> "relationships" :> Get '[JSON] (TabulaResponse [Relationship])
  :<|> TabulaAuth :> "member" :> Capture "userID" String :> "assignments" :> Get '[JSON] TabulaAssignmentResponse
 
-type TabulaAPI = CourseworkAPI :<|> TabulaMemberAPI
+type TabulaTimetableAPI =
+    TabulaAuth :> 
+    "termdates" :> 
+    QueryParam "academicYear" String :> 
+    Get '[JSON] (TabulaResponse [Term])
+
+type TabulaAPI = 
+    CourseworkAPI :<|> 
+    TabulaMemberAPI :<|>
+    TabulaTimetableAPI
 
 type API = TabulaAPI
 
