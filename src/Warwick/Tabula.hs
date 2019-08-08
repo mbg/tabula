@@ -34,6 +34,7 @@ module Warwick.Tabula (
     personAssignments,
     
     retrieveTermDates,
+    retrieveTermDatesFor,
     retrieveHolidays
 ) where
 
@@ -49,6 +50,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Internal as BS
 import Data.Text.Encoding (encodeUtf8)
 import qualified Data.HashMap.Lazy as HM
+import Data.Text (Text)
 
 import Data.Conduit
 import Data.Conduit.Binary hiding (mapM_)
@@ -159,18 +161,27 @@ personAssignments uid = do
 
 -------------------------------------------------------------------------------
 
--- | `retrieveTermDates` @academicYear@ retrieves information about an academic
--- year's terms. By default, information for the current academic year is
--- returned, but the academic year can be specified with @academicYear@ and 
--- should be the four character year in which the academic year starts.
+-- | `retrieveTermDates` retrieves information about an academic year's terms. 
+-- By default, information for the current academic year is returned, but the 
+-- academic year can be specified using the `retrieveTermDatesFor` function.
 --
--- >>> retrieveTermDates (Just "2019")
+-- >>> retrieveTermDates 
 -- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
 --
-retrieveTermDates ::
-    Maybe String -> Tabula (TabulaResponse [Term])
-retrieveTermDates academicYear =
-    handle $ I.retrieveTermDates academicYear
+retrieveTermDates :: Tabula (TabulaResponse [Term])
+retrieveTermDates = handle I.retrieveTermDates
+
+-- | `retrieveTermDatesFor` @academicYear@ retrieves information about an 
+-- academic year's terms. The academic year for which the term dates are
+-- retrieved is specified by @academicYear@. This should be the four 
+-- character year in which the academic year starts.
+--
+-- >>> retrieveTermDatesFor "2019"
+-- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
+--
+retrieveTermDatesFor :: Text -> Tabula (TabulaResponse [Term])
+retrieveTermDatesFor academicYear =
+    handle $ I.retrieveTermDatesFor academicYear
 
 -- | `retrieveHolidays` retrieves information about holiday dates.
 retrieveHolidays :: Tabula (TabulaResponse [Holiday])

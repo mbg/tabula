@@ -12,6 +12,7 @@ import qualified Data.HashMap.Lazy as HM
 import Data.ByteString as BS
 import Data.UUID.Types
 import Data.Proxy
+import Data.Text (Text)
 
 import Servant.API
 
@@ -111,7 +112,9 @@ type MemberAPI =
 -- | Represents the timetabling part of Tabula's API as a type.
 type TimetableAPI =
       "termdates" :> 
-      QueryParam "academicYear" String :> 
+      Get '[JSON] (TabulaResponse [Term])
+ :<|> "termdates" :> 
+      Capture "academicYear" Text :> 
       Get '[JSON] (TabulaResponse [Term])
  :<|> "holidaydates" :>
       Get '[JSON] (TabulaResponse [Holiday])

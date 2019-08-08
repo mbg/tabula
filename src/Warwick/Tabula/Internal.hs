@@ -9,6 +9,7 @@ module Warwick.Tabula.Internal where
 
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.ByteString as BS
+import Data.Text (Text)
 
 import Servant.API
 import Servant.Client
@@ -51,13 +52,17 @@ retrieveMember :<|>
     personAssignments = memberAPI
 
 retrieveTermDates ::
-    Maybe String -> 
+    ClientM (TabulaResponse [Term])
+
+retrieveTermDatesFor ::
+    Text -> 
     ClientM (TabulaResponse [Term])
 
 retrieveHolidays ::
     ClientM (TabulaResponse [Holiday])
 
 retrieveTermDates :<|>
+    retrieveTermDatesFor :<|>
     retrieveHolidays = timetableAPI
 
 --------------------------------------------------------------------------------
