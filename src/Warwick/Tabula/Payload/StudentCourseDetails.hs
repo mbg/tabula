@@ -24,11 +24,11 @@ data StudentCourseDetails = StudentCourseDetails {
     -- | The code for the current level for this student course details.
     scdLevelCode :: Text,
     -- | The date that this student course details begins.
-    scdBeginDate :: TabulaDate,
+    scdBeginDate :: Date,
     -- | The date that this student course details ended.
-    scdEndDate :: Maybe TabulaDate,
+    scdEndDate :: Maybe Date,
     -- | The date that this student course details is expected to end.
-    scdExpectedEndDate :: TabulaDate,
+    scdExpectedEndDate :: Date,
     -- | The expected length of the course, in years.
     scdCourseYearLength :: Text,
     -- | Whether this is currently the most significant student course details -

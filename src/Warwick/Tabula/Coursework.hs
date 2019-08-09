@@ -75,9 +75,9 @@ data Assignment = Assignment {
     assignmentOpenEnded :: Bool,
     assignmentOpened :: Bool,
     assignmentClosed :: Bool,
-    assignmentOpenDate :: TabulaDateTime,
-    assignmentCloseDate :: Maybe TabulaDateTime,
-    assignmentFeedbackDeadline :: Maybe TabulaDate,
+    assignmentOpenDate :: DateTime,
+    assignmentCloseDate :: Maybe DateTime,
+    assignmentFeedbackDeadline :: Maybe Date,
     assignmentFeedback :: Int,
     assignmentUnpublishedFeedback :: Int
 } deriving (Show, Generic)
@@ -98,7 +98,7 @@ data Submission = Submission {
     -- | Indicates whether the submission has been downloaded.
     submissionDownloaded         :: Bool,
     -- | Indicates when the submission was made.
-    submissionSubmittedDate      :: TabulaDateTime,
+    submissionSubmittedDate      :: DateTime,
     -- | Indicates whether the submission was late.
     submissionLate               :: Bool,
     -- | Indicates whether lateness was authorised.

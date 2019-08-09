@@ -38,9 +38,9 @@ data Term = Term {
     -- | The name of the term.
     termName :: Text,
     -- | The first day of the term.
-    termStart :: TabulaDate,
+    termStart :: Date,
     -- | The last day of the term.
-    termEnd :: TabulaDate,
+    termEnd :: Date,
     -- | The week numbers for the term.
     termWeekRange :: WeekRange
 } deriving Show

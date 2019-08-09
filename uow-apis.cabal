@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 37e8b4390683e5b40f135b7e82b81e1f37e4d37765ae4d9d76941c3976fcbbb2
+-- hash: e5b81c796a9d20703033392490fb9fe5d6ca105aed754df80e2805d61e492c76
 
 name:           uow-apis
 version:        0.2.0.0
@@ -27,15 +27,19 @@ source-repository head
 
 library
   exposed-modules:
+      Warwick.Common
       Warwick.Config
       Warwick.DownloadSubmission
+      Warwick.Peoplesearch
+      Warwick.Peoplesearch.API
+      Warwick.Peoplesearch.Profile
+      Warwick.Peoplesearch.Response
       Warwick.Tabula
       Warwick.Tabula.API
       Warwick.Tabula.Attachment
       Warwick.Tabula.Config
       Warwick.Tabula.Coursework
       Warwick.Tabula.Date
-      Warwick.Tabula.Error
       Warwick.Tabula.Internal
       Warwick.Tabula.Job
       Warwick.Tabula.JSON
@@ -48,7 +52,6 @@ library
       Warwick.Tabula.Payload.Week
       Warwick.Tabula.Relationship
       Warwick.Tabula.StudentAssignment
-      Warwick.Tabula.TabulaSession
       Warwick.Tabula.Types
   other-modules:
       Paths_uow_apis

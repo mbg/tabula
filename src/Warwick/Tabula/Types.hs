@@ -8,7 +8,7 @@ module Warwick.Tabula.Types (
 
     UUIDorString(..),
 
-    module Warwick.Tabula.Date,
+    module Warwick.Common,
     module Warwick.Tabula.JSON,
 
     HasPayload(..),
@@ -34,7 +34,7 @@ import Data.UUID.Types as UUID
 
 import Servant.API
 
-import Warwick.Tabula.Date
+import Warwick.Common
 import Warwick.Tabula.JSON
 
 --------------------------------------------------------------------------------

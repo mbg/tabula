@@ -42,7 +42,7 @@ data Member = Member {
     -- TODO: some private details fields here
     memberGroupName        :: Maybe String,
     -- TODO: some more fields here
-    memberInactivationDate :: Maybe TabulaDate,
+    memberInactivationDate :: Maybe Date,
     -- TODO: some more fields here
     memberStudentCourseDetails :: Maybe [StudentCourseDetails]
 }

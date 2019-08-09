@@ -33,8 +33,8 @@ instance FromJSON ExtensionStatus where
 data StudentAssignmentExtension = StudentAssignmentExtension {
     studentAssignmentExtID        :: UUID,
     studentAssignmentExtState     :: ExtensionStatus,
-    studentAssignmentExtReqExpiry :: Maybe TabulaDateTime,
-    studentAssignmentExtExpiry    :: TabulaDateTime
+    studentAssignmentExtReqExpiry :: Maybe DateTime,
+    studentAssignmentExtExpiry    :: DateTime
 } deriving Show
 
 instance FromJSON StudentAssignmentExtension where
@@ -71,8 +71,8 @@ data StudentAssignmentSubmission = StudentAssignmentSubmission {
     studentAssignmentSubmissionLate           :: Bool,
     studentAssignmentSubmissionAuthorisedLate :: Bool,
     --studentAssignmentSubmissionAttachments :: []
-    studentAssignmentSubmissionSubmittedDate  :: Maybe TabulaDateTime,
-    studentAssignmentSubmissionCloseDate      :: Maybe TabulaDateTime,
+    studentAssignmentSubmissionSubmittedDate  :: Maybe DateTime,
+    studentAssignmentSubmissionCloseDate      :: Maybe DateTime,
     studentAssignmentSubmissionWordCount      :: Maybe Int
 } deriving Show
 
@@ -100,8 +100,8 @@ data StudentAssignment = StudentAssignment {
     studentAssignmentOpenEnded :: Bool,
     studentAssignmentOpened :: Bool,
     studentAssignmentClosed :: Bool,
-    studentAssignmentOpenDate :: TabulaDateTime,
-    studentAssignmentCloseDate :: Maybe TabulaDateTime,
+    studentAssignmentOpenDate :: DateTime,
+    studentAssignmentCloseDate :: Maybe DateTime,
     studentAssignmentSubmission :: Maybe StudentAssignmentSubmission,
     studentAssignmentFeedback  :: Maybe StudentAssignmentFeedback,
     studentAssignmentExtension :: Maybe StudentAssignmentExtension

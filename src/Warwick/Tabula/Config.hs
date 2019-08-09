@@ -6,8 +6,7 @@
 module Warwick.Tabula.Config (
     TabulaInstance(..),
     liveURL,
-    sandboxURL,
-    urlForInstance
+    sandboxURL
 ) where
 
 --------------------------------------------------------------------------------
@@ -19,6 +18,8 @@ import qualified Data.ByteString.Lazy as BS
 import Data.Text
 
 import Servant.Client
+
+import Warwick.Common
 
 -------------------------------------------------------------------------------
 
@@ -45,10 +46,9 @@ liveURL = BaseUrl Https "tabula.warwick.ac.uk" 443 "/api/v1"
 sandboxURL :: BaseUrl
 sandboxURL = BaseUrl Https "tabula-sandbox.warwick.ac.uk" 443 "/api/v1"
 
--- | Determines the location of a given Tabula instance.
-urlForInstance :: TabulaInstance -> BaseUrl
-urlForInstance Sandbox              = sandboxURL
-urlForInstance Live                 = liveURL
-urlForInstance (CustomInstance url) = url
+instance HasBaseUrl TabulaInstance where
+    getBaseUrl Sandbox              = sandboxURL
+    getBaseUrl Live                 = liveURL
+    getBaseUrl (CustomInstance url) = url
 
 --------------------------------------------------------------------------------

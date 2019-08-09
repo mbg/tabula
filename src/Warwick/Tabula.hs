@@ -4,12 +4,12 @@
 --------------------------------------------------------------------------------
 
 module Warwick.Tabula (
+    module Warwick.Common,
+    module Warwick.Config,
     module Warwick.Tabula.Coursework,
     module Warwick.Tabula.Relationship,
 
     TabulaInstance(..),
-
-    Tabula(..),
 
     ModuleCode(..),
     AssignmentID(..),
@@ -67,17 +67,15 @@ import Servant.API.BasicAuth
 import Servant.Client
 
 import Warwick.Config
+import Warwick.Common
 import Warwick.Tabula.Config
 import Warwick.Tabula.Types
-import Warwick.Tabula.Error
 import Warwick.Tabula.Coursework
 import Warwick.Tabula.Member
 import Warwick.Tabula.Payload
 import Warwick.Tabula.Relationship
 import Warwick.Tabula.API
 import qualified Warwick.Tabula.Internal as I
-
-import Warwick.Tabula.TabulaSession
 import Warwick.DownloadSubmission
 
 -------------------------------------------------------------------------------
@@ -85,22 +83,8 @@ import Warwick.DownloadSubmission
 -- | 'withTabula' @instance config action@ runs the computation @action@
 -- by connecting to @instance@ with the configuration specified by @config@.
 withTabula ::
-    TabulaInstance -> APIConfig -> Tabula a -> IO (Either TabulaError a)
-withTabula inst APIConfig{..} m = do
-    manager <- newManager tlsManagerSettings
-
-    let auth = BasicAuthData
-                    (encodeUtf8 apiUsername)
-                    (encodeUtf8 apiPassword)
-        url  = urlForInstance inst
-        env  = ClientEnv manager url
-        sesh = TabulaSession auth manager url
-
-    r <- runClientM (runExceptT $ evalStateT m sesh) (env Nothing)
-
-    case r of
-        Left serr -> return $ Left $ TransportError serr
-        Right res -> return res
+    TabulaInstance -> APIConfig -> Warwick a -> IO (Either APIError a)
+withTabula = withAPI
 
 -------------------------------------------------------------------------------
 
@@ -108,7 +92,7 @@ withTabula inst APIConfig{..} m = do
 -- returns a non-2xx status code. 'handle' @m@ catches exceptions which are
 -- thrown when @m@ is executed and tries to convert them into a Tabula response.
 handle :: (FromJSON a, HasPayload a)
-       => ClientM (TabulaResponse a) -> Tabula (TabulaResponse a)
+       => ClientM (TabulaResponse a) -> Warwick (TabulaResponse a)
 handle m = lift $ lift $ m `catch` \(e :: ServantError) -> case e of
    FailureResponse r -> case decode (responseBody r) of
        Nothing -> throwM e
@@ -118,42 +102,42 @@ handle m = lift $ lift $ m `catch` \(e :: ServantError) -> case e of
 -------------------------------------------------------------------------------
 
 listAssignments ::
-    ModuleCode -> Maybe AcademicYear -> Tabula (TabulaResponse [Assignment])
+    ModuleCode -> Maybe AcademicYear -> Warwick (TabulaResponse [Assignment])
 listAssignments mc yr = do
-    authData <- tabulaAuthData
+    authData <- getAuthData
     handle $ I.listAssignments authData mc yr
 
 retrieveAssignment ::
-    ModuleCode -> AssignmentID -> [String] -> Tabula (TabulaResponse Assignment)
+    ModuleCode -> AssignmentID -> [String] -> Warwick (TabulaResponse Assignment)
 retrieveAssignment mc aid xs = do
     let fdata = if Prelude.null xs then Nothing else Just (intercalate "," xs)
-    authData <- tabulaAuthData
+    authData <- getAuthData
     handle $ I.retrieveAssignment authData mc (unAssignmentID aid) fdata
 
 listSubmissions ::
-    ModuleCode -> AssignmentID -> Tabula (TabulaResponse (HM.HashMap String (Maybe Submission)))
+    ModuleCode -> AssignmentID -> Warwick (TabulaResponse (HM.HashMap String (Maybe Submission)))
 listSubmissions mc aid = do
-    authData <- tabulaAuthData
+    authData <- getAuthData
     handle $ I.listSubmissions authData mc (unAssignmentID aid)
 
 -------------------------------------------------------------------------------
 
-retrieveMember :: String -> [String] -> Tabula (TabulaResponse Member)
+retrieveMember :: String -> [String] -> Warwick (TabulaResponse Member)
 retrieveMember uid fields = do
     let fdata = if Prelude.null fields then Nothing else Just (intercalate "," fields)
-    authData <- tabulaAuthData
+    authData <- getAuthData
     handle $ I.retrieveMember authData uid fdata
 
 listRelationships ::
-    String -> Tabula (TabulaResponse [Relationship])
+    String -> Warwick (TabulaResponse [Relationship])
 listRelationships uid = do
-    authData <- tabulaAuthData
+    authData <- getAuthData
     handle $ I.listRelationships authData uid
 
 personAssignments ::
-    String -> Tabula TabulaAssignmentResponse
+    String -> Warwick TabulaAssignmentResponse
 personAssignments uid = do
-    authData <- tabulaAuthData
+    authData <- getAuthData
     lift $ lift $ I.personAssignments authData uid `catch` \(e :: ServantError) -> case e of
        FailureResponse r -> case decode (responseBody r) of
            Nothing -> throwM e
@@ -169,7 +153,7 @@ personAssignments uid = do
 -- >>> retrieveTermDates 
 -- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
 --
-retrieveTermDates :: Tabula (TabulaResponse [Term])
+retrieveTermDates :: Warwick (TabulaResponse [Term])
 retrieveTermDates = handle I.retrieveTermDates
 
 -- | `retrieveTermDatesFor` @academicYear@ retrieves information about an 
@@ -180,7 +164,7 @@ retrieveTermDates = handle I.retrieveTermDates
 -- >>> retrieveTermDatesFor "2019"
 -- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
 --
-retrieveTermDatesFor :: Text -> Tabula (TabulaResponse [Term])
+retrieveTermDatesFor :: Text -> Warwick (TabulaResponse [Term])
 retrieveTermDatesFor academicYear =
     handle $ I.retrieveTermDatesFor academicYear
 
@@ -193,7 +177,7 @@ retrieveTermDatesFor academicYear =
 -- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
 --
 retrieveTermWeeks :: 
-    Maybe NumberingSystem -> Tabula (TabulaResponse [Week])
+    Maybe NumberingSystem -> Warwick (TabulaResponse [Week])
 retrieveTermWeeks numberingSystem =
     handle $ I.retrieveTermWeeks numberingSystem
 
@@ -206,12 +190,12 @@ retrieveTermWeeks numberingSystem =
 -- Right (TabulaOK {tabulaStatus = "ok", tabulaData = [..]})
 --
 retrieveTermWeeksFor :: 
-    Text -> Maybe NumberingSystem -> Tabula (TabulaResponse [Week])
+    Text -> Maybe NumberingSystem -> Warwick (TabulaResponse [Week])
 retrieveTermWeeksFor academicYear numberingSystem =
     handle $ I.retrieveTermWeeksFor academicYear numberingSystem
 
 -- | `retrieveHolidays` retrieves information about holiday dates.
-retrieveHolidays :: Tabula (TabulaResponse [Holiday])
+retrieveHolidays :: Warwick (TabulaResponse [Holiday])
 retrieveHolidays = handle I.retrieveHolidays 
 
 -------------------------------------------------------------------------------

@@ -41,9 +41,9 @@ data Week = Week {
     -- | The academic week number.
     weekNumber :: Int,
     -- | The first day of the week.
-    weekStart :: TabulaDate,
+    weekStart :: Date,
     -- | The last day of the week.
-    weekEnd :: TabulaDate,
+    weekEnd :: Date,
     -- | The name of the week, based on some `NumberingSystem`.
     weekName :: Text
 } deriving Show

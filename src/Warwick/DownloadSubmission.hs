@@ -23,7 +23,7 @@ import System.IO (withFile, IOMode(..))
 import Servant.API.BasicAuth
 import Servant.Client hiding (responseBody, responseHeaders)
 
-import Warwick.Tabula.TabulaSession
+import Warwick.Common
 import Warwick.Tabula.Types
 import Warwick.Tabula.Coursework
 
@@ -53,11 +53,11 @@ downloadSubmission :: String
                    -> String
                    -> FilePath
                    -> FilePath
-                   -> Tabula ()
+                   -> Warwick ()
 downloadSubmission sid mc aid subid fn out = do
-    manager            <- tabulaManager
-    baseURL            <- tabulaURL
-    BasicAuthData {..} <- tabulaAuthData
+    manager            <- getManager
+    baseURL            <- getURL
+    BasicAuthData {..} <- getAuthData
     req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid subid fn)
     let
         request
@@ -86,11 +86,11 @@ downloadSubmissionWithCallbacks :: String
                    -> FilePath
                    -> FilePath
                    -> TabulaDownloadCallbacks a
-                   -> Tabula ()
+                   -> Warwick ()
 downloadSubmissionWithCallbacks sid mc aid subid fn out (Callbacks {..}) = do
-    manager            <- tabulaManager
-    baseURL            <- tabulaURL
-    BasicAuthData {..} <- tabulaAuthData
+    manager            <- getManager
+    baseURL            <- getURL
+    BasicAuthData {..} <- getAuthData
     req <- parseRequest ("https://" ++ baseUrlHost baseURL ++ buildDownloadURL baseURL mc aid subid fn)
     let
         request

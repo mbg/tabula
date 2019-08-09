@@ -15,7 +15,7 @@ import Warwick.Tabula.Types
 --------------------------------------------------------------------------------
 
 -- | Represents a holiday date.
-newtype Holiday = Holiday { getHoliday :: TabulaDate }
+newtype Holiday = Holiday { getHoliday :: Date }
     deriving Show
 
 instance ToJSON Holiday where 

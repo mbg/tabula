@@ -17,7 +17,6 @@ import Data.Text (Text)
 import Servant.API
 
 import Warwick.Tabula.Types
-import Warwick.Tabula.Error
 import Warwick.Tabula.Attachment
 import Warwick.Tabula.Coursework
 import Warwick.Tabula.Job

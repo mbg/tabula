@@ -24,8 +24,8 @@ data JobInstance = JobInstance {
     jobSuccessful :: Bool,
     jobStatus :: String,
     jobUser :: String,
-    jobCreated :: TabulaDateTime,
-    jobUpdated :: TabulaDateTime,
+    jobCreated :: DateTime,
+    jobUpdated :: DateTime,
     jobData :: String
 } deriving (Show, Generic)
 
