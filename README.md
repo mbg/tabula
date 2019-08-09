@@ -10,13 +10,13 @@ The Tabula API client currently supports the following endpoints:
 
 ```haskell
 -- retrieve all assignments for cs141
-withTabula Live config $ 
+withAPI Live config $ 
    listAssignments "cs141" Nothing
 ```
 
 ```haskell
 -- retrieve all assignments for cs141 in 18/19
-withTabula Live config $ 
+withAPI Live config $ 
    listAssignments "cs141" (Just "18/19")
 ```
 
@@ -24,7 +24,7 @@ withTabula Live config $
 
 ```haskell
 -- retrieve all assignments for "1234567"
-withTabula Live config $ 
+withAPI Live config $ 
    personAssignments "1234567"
 ```
 
@@ -32,13 +32,13 @@ withTabula Live config $
 
 ```haskell
 -- retrieve all submissions for an assignment
-withTabula Live config $ 
+withAPI Live config $ 
    listSubmissions "cs141" "00000000-0000-0000-0000-000000000000"
 ```
 
 ```haskell
 -- retrieve all submissions for every assignment for cs141 in 18/19
-withTabula Live config $ do
+withAPI Live config $ do
    result <- listAssignments "cs141" (Just "18/19")
 
    case result of 
@@ -52,7 +52,7 @@ withTabula Live config $ do
 
 ```haskell
 -- download a submission
-withTabula Live config $ downloadSubmission 
+withAPI Live config $ downloadSubmission 
     -- the University ID of the student
     "1234567"
     -- the module code
@@ -73,13 +73,13 @@ An alternative version of `downloadSubmission` with callbacks to monitor downloa
 
 ```haskell
 -- retrieve all fields
-withTabula Live config $ 
+withAPI Live config $ 
    retrieveMember "1234567" []
 ```
 
 ```haskell
 -- only retrieve "member.fullname"
-withTabula Live config $ 
+withAPI Live config $ 
    retrieveMember "1234567" ["member.fullname"]
 ```
 
@@ -87,7 +87,7 @@ withTabula Live config $
 
 ```haskell
 -- list all relationships that "1234567" has
-withTabula Live config $ 
+withAPI Live config $ 
    listRelationships "1234567"
 ```
 
@@ -95,37 +95,37 @@ withTabula Live config $
 
 ```haskell
 -- Retrieve term dates for the current academic year
-withTabula Live config $ retrieveTermDates
+withAPI Live config $ retrieveTermDates
 ```
 
 ```haskell
 -- Retrieve term dates for the academic year starting in 2020 (20/21)
-withTabula Live config $ retrieveTermDatesFor "2020"
+withAPI Live config $ retrieveTermDatesFor "2020"
 ```
 
 * [Retrieve term weeks](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/timetabling/termweeks), including the ability to specify the numbering system and the academic year:
 
 ```haskell
 -- Retrieve term weeks for the current academic year
-withTabula Live config $
+withAPI Live config $
     retrieveTermWeeks Nothing
 ```
 
 ```haskell
 -- Retrieve term weeks for the current academic year, named using termly numbering
-withTabula Live config $
+withAPI Live config $
     retrieveTermWeeks (Just TermNumbering)
 ```
 
 ```haskell
 -- Retrieve term weeks for the 20/21 academic year
-withTabula Live config $
+withAPI Live config $
     retrieveTermWeeksFor "2020" Nothing
 ```
 
 ```haskell
 -- Retrieve term weeks for the 20/21 academic year, named using termly numbering
-withTabula Live config $
+withAPI Live config $
     retrieveTermWeeksFor "2020" (Just TermNumbering)
 ```
 
@@ -133,7 +133,7 @@ withTabula Live config $
 
 ```haskell
 -- Retrieve all holiday dates Tabula knows of
-withTabula Live config $ retrieveHolidays
+withAPI Live config $ retrieveHolidays
 ```
 
 ### Partially implemented endpoints
@@ -143,3 +143,19 @@ The following API endpoints are supported internally, but are not currently expo
 * [Retrieve an attachment's information](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/fileattachments/retrieve-attachment)
 
 * [Retrieve a job's status](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/jobs/retrieve-job)
+
+## Peoplesearch API
+
+* *Search profiles* 
+
+```haskell
+-- Search profiles for the string "michael"
+withAPI Live config $ searchProfiles "michael"
+```
+
+* *Lookup users* 
+
+```haskell
+-- Retrieve profiles for "1234567"
+withAPI Live config $ lookupProfile "1234567"
+```
