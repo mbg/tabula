@@ -4,14 +4,14 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b3680a7424879593284d3bd04325a123cc381e742fa343f8fd0b4b4097c2ca12
+-- hash: 37e8b4390683e5b40f135b7e82b81e1f37e4d37765ae4d9d76941c3976fcbbb2
 
-name:           tabula
-version:        0.1.0.0
-synopsis:       Haskell bindings for the Tabula API
-description:    Please see the README on GitHub at <https://github.com/mbg/tabula#readme>
-homepage:       https://github.com/mbg/tabula#readme
-bug-reports:    https://github.com/mbg/tabula/issues
+name:           uow-apis
+version:        0.2.0.0
+synopsis:       Haskell bindings for UoW APIs
+description:    Please see the README on GitHub at <https://github.com/mbg/uow-apis#readme>
+homepage:       https://github.com/mbg/uow-apis#readme
+bug-reports:    https://github.com/mbg/uow-apis/issues
 author:         Michael B. Gale
 maintainer:     m.gale@warwick.ac.uk
 copyright:      2019 Michael B. Gale
@@ -23,10 +23,11 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/mbg/tabula
+  location: https://github.com/mbg/uow-apis
 
 library
   exposed-modules:
+      Warwick.Config
       Warwick.DownloadSubmission
       Warwick.Tabula
       Warwick.Tabula.API
@@ -50,7 +51,7 @@ library
       Warwick.Tabula.TabulaSession
       Warwick.Tabula.Types
   other-modules:
-      Paths_tabula
+      Paths_uow_apis
   hs-source-dirs:
       src
   default-extensions: OverloadedStrings FlexibleInstances FlexibleContexts DeriveGeneric DataKinds TypeOperators ScopedTypeVariables RecordWildCards GeneralizedNewtypeDeriving OverlappingInstances

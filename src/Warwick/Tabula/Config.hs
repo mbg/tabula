@@ -1,15 +1,13 @@
 --------------------------------------------------------------------------------
--- Haskell bindings for the Tabula API                                        --
--- Copyright 2018 Michael B. Gale (m.gale@warwick.ac.uk)                      --
+-- Haskell bindings for the University of Warwick APIs                        --
+-- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
 module Warwick.Tabula.Config (
     TabulaInstance(..),
     liveURL,
     sandboxURL,
-    urlForInstance,
-    TabulaConfig(..), 
-    readTabulaConfig
+    urlForInstance
 ) where
 
 --------------------------------------------------------------------------------
@@ -52,22 +50,5 @@ urlForInstance :: TabulaInstance -> BaseUrl
 urlForInstance Sandbox              = sandboxURL
 urlForInstance Live                 = liveURL
 urlForInstance (CustomInstance url) = url
-
---------------------------------------------------------------------------------
-
-data TabulaConfig = TabulaConfig {
-    tabulaUsername :: Text,
-    tabulaPassword :: Text
-} deriving (Generic)
-
-instance FromJSON TabulaConfig where
-    parseJSON = withObject "TabulaConfig" $ \v ->
-        TabulaConfig <$> v .: "username"
-                     <*> v .: "password"
-
--- | `readTabulaConfig` @fp reads the configuration for the Tabula client
--- from a file located at @fp.
-readTabulaConfig :: FilePath -> IO (Maybe TabulaConfig)
-readTabulaConfig fp = decode <$> BS.readFile fp
 
 --------------------------------------------------------------------------------

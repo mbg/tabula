@@ -1,11 +1,9 @@
 --------------------------------------------------------------------------------
--- Haskell bindings for the Tabula API                                        --
--- Copyright 2018 Michael B. Gale (m.gale@warwick.ac.uk)                      --
+-- Haskell bindings for the University of Warwick APIs                        --
+-- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
 module Warwick.Tabula (
-    --module Warwick.Tabula.API,
-    --module Warwick.Tabula.Internal,
     module Warwick.Tabula.Coursework,
     module Warwick.Tabula.Relationship,
 
@@ -68,6 +66,7 @@ import qualified Network.HTTP.Client.Conduit as C
 import Servant.API.BasicAuth
 import Servant.Client
 
+import Warwick.Config
 import Warwick.Tabula.Config
 import Warwick.Tabula.Types
 import Warwick.Tabula.Error
@@ -86,13 +85,13 @@ import Warwick.DownloadSubmission
 -- | 'withTabula' @instance config action@ runs the computation @action@
 -- by connecting to @instance@ with the configuration specified by @config@.
 withTabula ::
-    TabulaInstance -> TabulaConfig -> Tabula a -> IO (Either TabulaError a)
-withTabula inst (TabulaConfig {..}) m = do
+    TabulaInstance -> APIConfig -> Tabula a -> IO (Either TabulaError a)
+withTabula inst APIConfig{..} m = do
     manager <- newManager tlsManagerSettings
 
     let auth = BasicAuthData
-                    (encodeUtf8 tabulaUsername)
-                    (encodeUtf8 tabulaPassword)
+                    (encodeUtf8 apiUsername)
+                    (encodeUtf8 apiPassword)
         url  = urlForInstance inst
         env  = ClientEnv manager url
         sesh = TabulaSession auth manager url
