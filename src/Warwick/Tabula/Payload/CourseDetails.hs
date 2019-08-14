@@ -22,7 +22,7 @@ data CourseDetails = CourseDetails {
     courseName :: Text,
     -- | The course type (e.g. "UG").
     courseType :: Text
-}
+} deriving Show
 
 instance FromJSON CourseDetails where
     parseJSON = withObject "CourseDetails" $ \v ->

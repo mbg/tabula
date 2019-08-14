@@ -47,9 +47,31 @@ listAssignments :<|>
     uploadAttachment :<|>
     retrieveJob = courseworkAPI
 
+--------------------------------------------------------------------------------
+
+listMembers ::
+    BasicAuthData ->
+    [Text] ->
+    Maybe Text ->
+    Maybe Int ->
+    Maybe Int ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    Maybe Text ->
+    ClientM (TabulaResponse [Member])
+
 retrieveMember :<|>
     listRelationships :<|>
-    personAssignments = memberAPI
+    personAssignments :<|>
+    listMembers = memberAPI
+
+--------------------------------------------------------------------------------
 
 retrieveTermDates ::
     ClientM (TabulaResponse [Term])

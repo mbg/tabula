@@ -30,7 +30,7 @@ data StudentCourseDetails = StudentCourseDetails {
     -- | The date that this student course details is expected to end.
     scdExpectedEndDate :: Date,
     -- | The expected length of the course, in years.
-    scdCourseYearLength :: Text,
+    scdCourseYearLength :: Int,
     -- | Whether this is currently the most significant student course details -
     -- this will be `true` for only one student course details per student.
     scdMostSignificant :: Bool,
@@ -41,7 +41,7 @@ data StudentCourseDetails = StudentCourseDetails {
     scdCourse :: CourseDetails
     -- TODO: more fields here, see
     -- https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/member/student-course-details-object
-}
+} deriving Show
 
 instance FromJSON StudentCourseDetails where
     parseJSON = withObject "StudentCourseDetails" $ \v ->

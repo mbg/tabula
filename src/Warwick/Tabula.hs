@@ -30,6 +30,7 @@ module Warwick.Tabula (
     retrieveMember,
     listRelationships,
     personAssignments,
+    listMembers,
     
     retrieveTermDates,
     retrieveTermDatesFor,
@@ -50,7 +51,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Internal as BS
 import Data.Text.Encoding (encodeUtf8)
 import qualified Data.HashMap.Lazy as HM
-import Data.Text (Text)
+import Data.Text (Text, pack)
 
 import Data.Conduit
 import Data.Conduit.Binary hiding (mapM_)
@@ -74,6 +75,7 @@ import Warwick.Tabula.Coursework
 import Warwick.Tabula.Member
 import Warwick.Tabula.Payload
 import Warwick.Tabula.Relationship
+import Warwick.Tabula.MemberSearchFilter
 import Warwick.Tabula.API
 import qualified Warwick.Tabula.Internal as I
 import Warwick.DownloadSubmission
@@ -143,6 +145,27 @@ personAssignments uid = do
            Nothing -> throwM e
            Just r  -> return r
        _                    -> throwM e
+
+-- | `listMembers` @filterSettings offset limit@ 
+listMembers ::
+    MemberSearchFilter -> Int -> Int -> Warwick (TabulaResponse [Member])
+listMembers MemberSearchFilter{..} offset limit = do 
+    authData <- getAuthData
+    handle $ I.listMembers 
+        authData 
+        filterDepartment
+        (toSearchParam filterFields)
+        (Just offset)
+        (Just limit) 
+        (toSearchParam $ map (pack . show) filterCourseTypes)
+        (toSearchParam filterRoutes)
+        (toSearchParam filterCourses)
+        (toSearchParam filterModesOfAttendance)
+        (toSearchParam $ map (pack . show) filterYearsOfStudy)
+        (toSearchParam filterLevelCodes)
+        (toSearchParam filterSprStatuses)
+        (toSearchParam filterModules)
+        (toSearchParam filterHallsOfResidence)  
 
 -------------------------------------------------------------------------------
 

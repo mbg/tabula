@@ -31,6 +31,9 @@ import Warwick.Tabula.StudentAssignment
 data TabulaResponse a
     = TabulaOK {
         tabulaStatus  :: String,
+        tabulaOffset  :: Maybe Int,
+        tabulaLimit   :: Maybe Int,
+        tabulaTotal   :: Maybe Int,
         tabulaData    :: a
     } deriving (Show)
 
@@ -45,6 +48,9 @@ instance (HasPayload a, FromJSON a) => FromJSON (TabulaResponse a) where
         s <- v .: "success"
         if s
         then TabulaOK <$> v .: "status"
+                      <*> v .:? "offset"
+                      <*> v .:? "limit"
+                      <*> v .:? "total"
                       <*> payload v
         else fail "200 OK, but success is not true (this should not happen)"
 
@@ -107,6 +113,22 @@ type MemberAPI =
       Capture "userID" String :> 
       "assignments" :> 
       Get '[JSON] TabulaAssignmentResponse
+ :<|> TabulaAuth :>
+      "members" :> 
+      QueryParams "department" Text :>
+      QueryParam "fields" Text :>
+      QueryParam "offset" Int :>
+      QueryParam "limit" Int :>
+      QueryParam "courseTypes" Text :>
+      QueryParam "routes" Text :>
+      QueryParam "courses" Text :>
+      QueryParam "modesOfAttendance" Text :> 
+      QueryParam "yearsOfStudy" Text :> 
+      QueryParam "levelCodes" Text :>
+      QueryParam "sprStatuses" Text :> 
+      QueryParam "modules" Text :>
+      QueryParam "hallsOfResidence" Text :>
+      Get '[JSON] (TabulaResponse [Member])
 
 -- | Represents the timetabling part of Tabula's API as a type.
 type TimetableAPI =

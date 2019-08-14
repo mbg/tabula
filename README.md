@@ -91,6 +91,17 @@ withAPI Live config $
    listRelationships "1234567"
 ```
 
+* [Search for members](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/member/search-for-members), see the documentation for `Warwick.Tabula.MemberSearchFilter` to see which filter options are available. Use `defaultMemberSearch` as a starting value for which all filters are initially set to `[]`.
+
+```haskell
+settings :: MemberSearchFilter
+settings = defaultMemberSearch {
+   filterDepartment = ["cs"]
+}
+
+withAPI Live config $ listMembers settings 0 10
+```
+
 * [Retrieve term dates](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/timetabling/termdates), including the ability to specify the academic year:
 
 ```haskell

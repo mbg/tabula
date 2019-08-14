@@ -45,7 +45,7 @@ data Member = Member {
     memberInactivationDate :: Maybe Date,
     -- TODO: some more fields here
     memberStudentCourseDetails :: Maybe [StudentCourseDetails]
-}
+} deriving Show
 
 instance FromJSON Member where
     parseJSON = withObject "member" $ \v ->
@@ -70,5 +70,8 @@ instance FromJSON Member where
 
 instance HasPayload Member where
     payloadFieldName _ = "member"
+
+instance HasPayload [Member] where 
+    payloadFieldName _ = "members"
 
 --------------------------------------------------------------------------------
