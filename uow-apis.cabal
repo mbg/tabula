@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7a46ddca3a270f0496f79eef31c6218959dda7f66e0b61fd9ca1056b34aa923d
+-- hash: 36ed3b759873e01423981d6183140c40e07b52840bef8838bfefbb25906f1270
 
 name:           uow-apis
 version:        0.2.0.0
@@ -30,6 +30,10 @@ library
       Warwick.Common
       Warwick.Config
       Warwick.DownloadSubmission
+      Warwick.MyWarwick
+      Warwick.MyWarwick.API
+      Warwick.MyWarwick.Response
+      Warwick.MyWarwick.StreamItem
       Warwick.Peoplesearch
       Warwick.Peoplesearch.API
       Warwick.Peoplesearch.Profile

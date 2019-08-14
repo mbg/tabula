@@ -159,3 +159,28 @@ withAPI Live config $ searchProfiles "michael"
 -- Retrieve profiles for "1234567"
 withAPI Live config $ lookupProfile "1234567"
 ```
+
+## MyWarwick API
+
+The endpoints for posting items to the alert and activity streams are supported. Example for `postAlert`:
+
+```haskell
+recipients :: StreamRecipients
+recipients = StreamRecipients {
+   srUsers = Just ["u1234567"],
+   srGroups = Nothing
+}
+
+item :: StreamItem
+item = StreamItem {
+   siType = "test-alert",
+   siTitle = "Title",
+   siText = "Test body",
+   siURL = Just "http://example.com",
+   siRecipients = recipients
+}
+
+withAPI Live config $ postAlert "example-provider" item
+```
+
+To add the item to the activity stream instead of the alert stream, simply replace `postAlert` with `postActivity` in the example above.
