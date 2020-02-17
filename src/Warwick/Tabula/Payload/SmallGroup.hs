@@ -11,6 +11,7 @@ import Data.Aeson
 import Data.Text
 
 import Warwick.Common
+import Warwick.Tabula.Types
 import Warwick.Tabula.Attachment
 import Warwick.Tabula.Payload.Module
 import Warwick.Tabula.Payload.Note
@@ -61,6 +62,9 @@ instance FromJSON SmallGroupSet where
                       <*> obj .: "name"
                       <*> obj .: "format"
                       <*> obj .: "module"
+
+instance HasPayload [SmallGroupSet] where 
+    payloadFieldName _ = "groups"
 
 --------------------------------------------------------------------------------
 

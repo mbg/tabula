@@ -31,6 +31,8 @@ module Warwick.Tabula (
     downloadSubmission,
     downloadSubmissionWithCallbacks,
 
+    listSmallGroupSets,
+
     retrieveMember,
     listRelationships,
     personAssignments,
@@ -149,6 +151,17 @@ postMarks ::
 postMarks mc aid marks = do 
     authData <- getAuthData
     handle $ I.postMarks authData mc (unAssignmentID aid) marks
+
+-------------------------------------------------------------------------------
+
+-- | `listSmallGroupSets` @moduleCode maybeAcademicYear@ lists all the small
+-- group sets for @moduleCode@. If @maybeAcademicYear@ is `Nothing`, the sets
+-- for the current academic year are returned. Otherwise the sets for the 
+-- specified academic year are returned.
+listSmallGroupSets :: ModuleCode -> Maybe Text -> Warwick (TabulaResponse [SmallGroupSet])
+listSmallGroupSets mc mYear = do 
+    authData <- getAuthData 
+    handle $ I.listSmallGroupSets authData mc mYear
 
 -------------------------------------------------------------------------------
 

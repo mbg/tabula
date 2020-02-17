@@ -97,6 +97,18 @@ withAPI Live config $ downloadSubmission
 
 An alternative version of `downloadSubmission` with callbacks to monitor download progress is available as `downloadSubmissionWithCallbacks`. This function additionally takes a parameter of type `TabulaDownloadCallbacks`. See the module documentation for `Warwick.DownloadSubmission` to see which callbacks are available.
 
+* [List all small groups for a module](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/groups/smallgroupsets/list-smallgroupsets), including the ability to specify the academic year.
+
+```haskell
+-- retrieve all small group sets for CS141 for the current academic year
+withAPI Live config $ listSmallGroupSets "cs141" Nothing
+```
+
+```haskell
+-- retrieve all small group sets for CS141 for the 19/20 academic year
+withAPI Live config $ listSmallGroupSets "cs141" (Just "19/20")
+```
+
 * [Retrieve a member](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/member/retrieve-member), including support for specifying which fields should be retrieved:
 
 ```haskell

@@ -26,7 +26,7 @@ import Warwick.Tabula.StudentAssignment
 
 --------------------------------------------------------------------------------
 
-adminAPI :<|> courseworkAPI :<|> memberAPI :<|> timetableAPI = client tabula
+adminAPI :<|> courseworkAPI :<|> smallGroupAPI :<|> memberAPI :<|> timetableAPI = client tabula
 
 --------------------------------------------------------------------------------
 
@@ -56,6 +56,16 @@ listAssignments :<|>
     postMarks :<|>
     uploadAttachment :<|>
     retrieveJob = courseworkAPI
+
+--------------------------------------------------------------------------------
+
+listSmallGroupSets :: 
+    BasicAuthData -> 
+    ModuleCode -> 
+    Maybe Text -> 
+    ClientM (TabulaResponse [SmallGroupSet])
+    
+listSmallGroupSets = smallGroupAPI
 
 --------------------------------------------------------------------------------
 
