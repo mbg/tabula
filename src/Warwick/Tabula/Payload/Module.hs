@@ -11,28 +11,23 @@ import Data.Aeson
 import Data.Text
 
 import Warwick.Tabula.Payload.Department
+import Warwick.Tabula.Payload.BaseModule
 import Warwick.Tabula.Types
 
 --------------------------------------------------------------------------------
 
 -- | Represents information about a module.
 data Module = Module {
-    -- | A value indicating whether the module is currently active.
-    mActive :: Maybe Bool,
+    -- | The base module details.
+    mBaseModule :: BaseModule,
     -- | Information about the department responsible for the module.
-    mAdminDepartment :: DepartmentR,
-    -- | The module code.
-    mCode :: Text,
-    -- | The name of the module.
-    mName :: Text
+    mAdminDepartment :: DepartmentR
 } deriving (Eq, Show)
 
 instance FromJSON Module where 
     parseJSON = withObject "Module" $ \obj ->
-        Module <$> obj .:? "active" 
+        Module <$> parseJSON (Object obj) 
                <*> obj .: "adminDepartment"
-               <*> obj .: "code"
-               <*> obj .: "name"
 
 instance HasPayload Module where 
     payloadFieldName _ = "module"
