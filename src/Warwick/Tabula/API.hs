@@ -128,6 +128,11 @@ type SmallGroupAPI =
       Capture "smallGroupSetId" Text :> 
       "allocations" :>
       Get '[JSON] (TabulaResponse SmallGroupAllocations)
+ :<|> TabulaAuth :>
+      "groups" :>
+      Capture "smallGroupId" Text :> 
+      "attendance" :>
+      Get '[JSON] (TabulaResponse SmallGroupAttendanceResponse)
 
 -- | Represents the membership part of Tabula's API as a type.
 type MemberAPI =

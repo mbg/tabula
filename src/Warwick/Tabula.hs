@@ -33,6 +33,7 @@ module Warwick.Tabula (
 
     listSmallGroupSets,
     retrieveSmallGroupAllocations,
+    retrieveSmallGroupAttendance,
 
     retrieveMember,
     listRelationships,
@@ -171,6 +172,15 @@ retrieveSmallGroupAllocations :: ModuleCode -> Text -> Warwick (TabulaResponse S
 retrieveSmallGroupAllocations mc setId = do 
     authData <- getAuthData 
     handle $ I.retrieveSmallGroupAllocations authData mc setId
+
+-- | `retrieveSmallGroupAttendance` @smallGroupId@ retrieves attendance 
+-- information for all events belonging to the small group identified by
+-- @smallGroupId@.
+retrieveSmallGroupAttendance :: 
+    Text -> Warwick (TabulaResponse SmallGroupAttendanceResponse)
+retrieveSmallGroupAttendance groupId = do 
+    authData <- getAuthData 
+    handle $ I.retrieveSmallGroupAttendance authData groupId
 
 -------------------------------------------------------------------------------
 

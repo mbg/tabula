@@ -91,6 +91,16 @@ instance FromJSON Location where
 
 --------------------------------------------------------------------------------
 
+data EventRef = EventRef {
+    erId :: Text, 
+    erWeek :: Int
+} deriving (Eq, Show)
+
+instance FromJSON EventRef where 
+    parseJSON = withObject "EventRef" $ \obj ->
+        EventRef <$> obj .: "event"
+                 <*> obj .: "week"
+
 data Event = Event {
     eId :: Text,
     eTitle :: Text,
@@ -195,5 +205,74 @@ instance FromJSON SmallGroupAllocations where
 
 instance HasPayload SmallGroupAllocations where 
     payloadFieldName _ = "allocations" 
+
+--------------------------------------------------------------------------------
+
+data StudentEventAttendance = StudentEventAttendance {
+    seaEventRef :: EventRef, 
+    seaStatus :: EventAttendanceStatus
+} deriving (Eq, Show)
+
+instance FromJSON StudentEventAttendance where
+    parseJSON = withObject "StudentEventAttendance" $ \obj ->
+        StudentEventAttendance <$> obj .: "event"
+                               <*> obj .: "status"
+
+data EventAttendanceStatus = EventAttendanceStatus {
+    easState :: Text,
+    easDetails :: Maybe SmallGroupEventAttendance,
+    easNote :: Maybe AttendanceNote
+} deriving (Eq, Show)
+
+instance FromJSON EventAttendanceStatus where 
+    parseJSON = withObject "EventAttendanceStatus" $ \obj ->
+        EventAttendanceStatus <$> obj .: "state"
+                              <*> obj .:? "details"
+                              <*> obj .:? "note"
+
+data SmallGroupEventAttendance = SmallGroupEventAttendance {
+    sgeaUpdatedBy :: Text,
+    sgeaUpdatedDate :: Date,
+    sgeaJoinedOn :: Maybe Date,
+    sgeaExpectedToAttend :: Bool,
+    sgeaAddedManually :: Bool,
+    sgeaReplacesAttendance :: Maybe SmallGroupEventAttendance,
+    sgeaReplacedBy :: [SmallGroupEventAttendance]
+} deriving (Eq, Show)
+
+instance FromJSON SmallGroupEventAttendance where 
+    parseJSON = withObject "SmallGroupEventAttendance" $ \obj -> 
+        SmallGroupEventAttendance <$> obj .: "updatedBy"
+                                  <*> obj .: "updatedDate"
+                                  <*> obj .:? "joinedOn"
+                                  <*> obj .: "expectedToAttend"
+                                  <*> obj .: "addedManually"
+                                  <*> obj .:? "replacesAttendance"
+                                  <*> obj .: "replacedBy"
+
+data StudentAttendance = StudentAttendance {
+    saUniversityID :: Text, 
+    saEvents :: [StudentEventAttendance]
+} deriving (Eq, Show)
+
+instance FromJSON StudentAttendance where 
+    parseJSON = withObject "StudentAttendance" $ \obj ->
+        StudentAttendance <$> obj .: "student"
+                          <*> obj .: "events"
+
+data SmallGroupAttendanceResponse = SmallGroupAttendanceResponse {
+    sgarEvents :: M.Map Text Event,
+    sgarInstances :: M.Map Text [Int],
+    sgarAttendance :: [StudentAttendance]
+} deriving (Eq, Show)
+
+instance FromJSON SmallGroupAttendanceResponse where 
+    parseJSON = withObject "SmallGroupAttendanceResponse" $ \obj -> 
+        SmallGroupAttendanceResponse <$> obj .: "events"
+                                     <*> obj .: "instances"
+                                     <*> obj .: "attendance"
+
+instance HasPayload SmallGroupAttendanceResponse where 
+    payloadFieldName _ = "attendance"
 
 --------------------------------------------------------------------------------

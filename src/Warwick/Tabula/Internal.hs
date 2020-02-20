@@ -71,8 +71,14 @@ retrieveSmallGroupAllocations ::
     Text ->
     ClientM (TabulaResponse SmallGroupAllocations)
 
+retrieveSmallGroupAttendance :: 
+    BasicAuthData -> 
+    Text -> 
+    ClientM (TabulaResponse SmallGroupAttendanceResponse)
+
 listSmallGroupSets :<|> 
-    retrieveSmallGroupAllocations = smallGroupAPI
+    retrieveSmallGroupAllocations :<|>
+    retrieveSmallGroupAttendance = smallGroupAPI
 
 --------------------------------------------------------------------------------
 

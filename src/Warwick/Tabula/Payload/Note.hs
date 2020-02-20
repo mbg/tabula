@@ -20,7 +20,7 @@ import Warwick.Tabula.Attachment
 data AttendanceNote = AttendanceNote {
     anAbsenceType :: Text, 
     anContents :: Maybe Text,
-    anUpdatedDate :: DateTime,
+    anUpdatedDate :: Date,
     anUpdatedBy :: Text,
     anAttachment :: Maybe Attachment
 } deriving (Eq, Show)
