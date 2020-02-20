@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d9b9865c79a1953653b8ef937778e0311b1d02aae75c69375eb4c88a4749f921
+-- hash: 5ee2a41d09876dbb00f0369e5adcd05510a9bdb82863e1f3b0a9a3044e13f2f1
 
 name:           uow-apis
 version:        0.2.0.0
@@ -60,6 +60,7 @@ library
       Warwick.Tabula.MemberSearchFilter
       Warwick.Tabula.Payload
       Warwick.Tabula.Payload.Attendance
+      Warwick.Tabula.Payload.BaseModule
       Warwick.Tabula.Payload.CourseDetails
       Warwick.Tabula.Payload.Department
       Warwick.Tabula.Payload.Holiday
@@ -68,6 +69,7 @@ library
       Warwick.Tabula.Payload.MonitoringPoints
       Warwick.Tabula.Payload.None
       Warwick.Tabula.Payload.Note
+      Warwick.Tabula.Payload.Route
       Warwick.Tabula.Payload.SmallGroup
       Warwick.Tabula.Payload.StudentCourseDetails
       Warwick.Tabula.Payload.Term
@@ -87,6 +89,7 @@ library
     , bytestring
     , conduit
     , conduit-extra
+    , containers
     , exceptions
     , feed
     , http-client

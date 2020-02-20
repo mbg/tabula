@@ -115,12 +115,19 @@ type CourseworkAPI =
       Get '[JSON] (TabulaResponse JobInstance)
 
 type SmallGroupAPI = 
-     TabulaAuth :> 
-     "module" :>
-     Capture "moduleCode" ModuleCode :> 
-     "groups" :>
-     QueryParam "academicYear" Text :>
-     Get '[JSON] (TabulaResponse [SmallGroupSet])
+      TabulaAuth :> 
+      "module" :>
+      Capture "moduleCode" ModuleCode :> 
+      "groups" :>
+      QueryParam "academicYear" Text :>
+      Get '[JSON] (TabulaResponse [SmallGroupSet])
+ :<|> TabulaAuth :>
+      "module" :>
+      Capture "moduleCode" ModuleCode :>
+      "groups" :>
+      Capture "smallGroupSetId" Text :> 
+      "allocations" :>
+      Get '[JSON] (TabulaResponse SmallGroupAllocations)
 
 -- | Represents the membership part of Tabula's API as a type.
 type MemberAPI =

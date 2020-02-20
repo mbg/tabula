@@ -9,6 +9,7 @@ module Warwick.Tabula.Payload.SmallGroup where
 
 import Data.Aeson
 import Data.Text
+import qualified Data.Map as M
 
 import Warwick.Common
 import Warwick.Tabula.Types
@@ -70,12 +71,12 @@ instance HasPayload [SmallGroupSet] where
 
 data Tutor = Tutor {
     tUserId :: Text,
-    tUniversityId :: Text
+    tUniversityId :: Maybe Text
 } deriving (Eq, Show)
 
 instance FromJSON Tutor where 
     parseJSON = withObject "Tutor" $ \obj ->
-        Tutor <$> obj .: "userId" <*> obj .: "universityId"
+        Tutor <$> obj .: "userId" <*> obj .:? "universityId"
 
 --------------------------------------------------------------------------------
 
@@ -131,6 +132,7 @@ data EventState
     | NotRecordedEvent
     | LateEvent
     | NotExpectedEvent
+    | Other Text
     deriving (Eq, Show)
 
 instance FromJSON EventState where 
@@ -140,6 +142,7 @@ instance FromJSON EventState where
     parseJSON (String "NotRecorded") = pure NotRecordedEvent
     parseJSON (String "Late") = pure LateEvent
     parseJSON (String "NotExpected") = pure NotExpectedEvent
+    parseJSON (String other) = pure $ Other other
     parseJSON _ = fail "Not a valid EventState"
 
 --------------------------------------------------------------------------------
@@ -181,5 +184,16 @@ instance FromJSON SmallGroupSetAttendance where
     parseJSON = withObject "SmallGroupSetAttendance" $ \obj ->
         SmallGroupSetAttendance <$> obj .: "groupSet"
                                 <*> obj .: "groups"
+
+--------------------------------------------------------------------------------
+
+newtype SmallGroupAllocations = SGT (M.Map Text [Text])
+    deriving (Eq, Show)
+
+instance FromJSON SmallGroupAllocations where 
+    parseJSON v = SGT <$> parseJSON v
+
+instance HasPayload SmallGroupAllocations where 
+    payloadFieldName _ = "allocations" 
 
 --------------------------------------------------------------------------------

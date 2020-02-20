@@ -24,6 +24,7 @@ dependencies:
 - text
 - time
 - iso8601-time
+- containers
 - unordered-containers
 - aeson
 - xeno

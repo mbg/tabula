@@ -109,6 +109,13 @@ withAPI Live config $ listSmallGroupSets "cs141" Nothing
 withAPI Live config $ listSmallGroupSets "cs141" (Just "19/20")
 ```
 
+* [Retrieve small group set allocations](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/groups/smallgroupsets/retrieve-allocations)
+
+```haskell
+-- retrieve all allocations for the small group set whose ID is "00000000-0000-0000-0000-000000000000"
+withAPI Live config $ retrieveSmallGroupAllocations "cs141" "00000000-0000-0000-0000-000000000000"
+```
+
 * [Retrieve a member](https://warwick.ac.uk/services/its/servicessupport/web/tabula/api/member/retrieve-member), including support for specifying which fields should be retrieved:
 
 ```haskell

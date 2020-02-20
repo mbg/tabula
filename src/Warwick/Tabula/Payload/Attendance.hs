@@ -19,13 +19,13 @@ import Warwick.Tabula.Payload.SmallGroup
 --------------------------------------------------------------------------------
 
 data MemberAttendance = MemberAttendance {
-    maMonitoringPoints :: [MonitoringPointAttendance],
+    maMonitoringPoints :: Maybe [MonitoringPointAttendance],
     maSmallGroups :: [SmallGroupSetAttendance]
 } deriving (Eq, Show)
 
 fromJSONObject :: Object -> Parser MemberAttendance
 fromJSONObject obj = 
-    MemberAttendance <$> obj .: "monitoringPoints"
+    MemberAttendance <$> obj .:? "monitoringPoints"
                      <*> obj .: "smallGroups"
 
 instance FromJSON MemberAttendance where 

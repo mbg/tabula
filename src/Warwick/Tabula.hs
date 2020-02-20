@@ -32,6 +32,7 @@ module Warwick.Tabula (
     downloadSubmissionWithCallbacks,
 
     listSmallGroupSets,
+    retrieveSmallGroupAllocations,
 
     retrieveMember,
     listRelationships,
@@ -162,6 +163,14 @@ listSmallGroupSets :: ModuleCode -> Maybe Text -> Warwick (TabulaResponse [Small
 listSmallGroupSets mc mYear = do 
     authData <- getAuthData 
     handle $ I.listSmallGroupSets authData mc mYear
+
+-- | `retrieveSmallGroupAllocations` @moduleCode sgSetId@ lists the 
+-- small group allocations for the small group set identified by @sgSetId@ for
+-- the module identified by @moduleCode@.
+retrieveSmallGroupAllocations :: ModuleCode -> Text -> Warwick (TabulaResponse SmallGroupAllocations)
+retrieveSmallGroupAllocations mc setId = do 
+    authData <- getAuthData 
+    handle $ I.retrieveSmallGroupAllocations authData mc setId
 
 -------------------------------------------------------------------------------
 
