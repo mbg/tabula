@@ -41,6 +41,7 @@ import Warwick.Common
 import qualified Warwick.Sitebuilder.API as API
 import qualified Warwick.Sitebuilder.PageInfo as API
 import qualified Warwick.Sitebuilder.PageUpdate as API
+import qualified Warwick.Sitebuilder.PageOptions as API
 
 --------------------------------------------------------------------------------
 

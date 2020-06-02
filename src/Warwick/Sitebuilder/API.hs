@@ -18,6 +18,7 @@ import Servant.Client
 import Warwick.Sitebuilder.Atom
 import Warwick.Sitebuilder.PageInfo
 import Warwick.Sitebuilder.PageUpdate
+import Warwick.Sitebuilder.PageCreate
 
 --------------------------------------------------------------------------------
         
@@ -42,8 +43,8 @@ type SitebuilderAPI =
       "atom" :>
       "atom.htm" :>
       QueryParam "page" Text :>
-      ReqBody '[ATOM] PageUpdate :>
-      POST '[ATOM] ()
+      ReqBody '[ATOM] PageCreate :>
+      Post '[ATOM] ()
  :<|> SitebuilderAuth :>
       "api" :>
       "page.json" :>
