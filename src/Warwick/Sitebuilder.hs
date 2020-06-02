@@ -42,6 +42,7 @@ import qualified Warwick.Sitebuilder.API as API
 import qualified Warwick.Sitebuilder.PageInfo as API
 import qualified Warwick.Sitebuilder.PageUpdate as API
 import qualified Warwick.Sitebuilder.PageOptions as API
+import qualified Warwick.Sitebuilder.PageCreate as API
 
 --------------------------------------------------------------------------------
 
@@ -67,6 +68,13 @@ instance HasBaseUrl SitebuilderInstance where
     getBaseUrl (CustomInstance url) = url
 
 -------------------------------------------------------------------------------
+
+-- | `createPage` @path pageData@ creates a page at location @path@ with data
+--   @pageData@
+createPage :: Text -> API.PageCreate -> Warwick ()
+createPage path pageData = do
+    authData <- getAuthData
+    lift $ lift $ API.createPage authData (Just path) pageData
 
 -- | 'editPage' @path update@ updates the page at @path@ with @update@.
 editPage :: Text -> API.PageUpdate -> Warwick ()
