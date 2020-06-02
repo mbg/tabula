@@ -18,6 +18,8 @@ module Warwick.Sitebuilder (
     editPageFromFile,
     pageInfo,
     uploadFile,
+    deletePage,
+    restorePage,
     purge
 ) where 
 
@@ -113,6 +115,22 @@ pageInfo :: Text -> Warwick API.PageInfo
 pageInfo page = do 
     authData <- getAuthData
     lift $ lift $ API.pageInfo authData (Just page)
+
+-- | 'changeDeleteStatus' @deleted path@ sets the deleted status for the page at 
+--   @path@ to @deleted@
+changeDeleteStatus :: Bool -> Text -> Warwick ()
+changeDeleteStatus deleted page = do
+    authData <- getAuthData
+    lift $ lift $ API.editPage authData (Just page) (Just "single") $ 
+        API.PageUpdate Nothing $ API.defaultPageOpts { API.poDeleted = Just deleted }
+
+-- | 'deletePage' @path@ sets the deleted status to true for the page at @path@
+deletePage :: Text -> Warwick ()
+deletePage = changeDeleteStatus True
+
+-- | 'restorePage' @path@ sets the deleted status to false for the page or file at @path@
+restorePage :: Text -> Warwick ()
+restorePage = changeDeleteStatus False
 
 -- | 'purge' @path@ purges the page or file located at @path@.
 purge :: Text -> Warwick ()
