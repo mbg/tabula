@@ -12,6 +12,8 @@ module Warwick.Sitebuilder (
 
     SitebuilderInstance(..),
 
+    createPage,
+    createPageFromFile,
     editPage,
     editPageFromFile,
     pageInfo,
@@ -75,6 +77,19 @@ createPage :: Text -> API.PageCreate -> Warwick ()
 createPage path pageData = do
     authData <- getAuthData
     lift $ lift $ API.createPage authData (Just path) pageData
+
+-- | `createPageFromFile` @path title pageName filepath@ creates a page @pageName@
+--   at the location @path@ with title @title@ and the contents of @filePath@ as 
+--   the page contents
+createPageFromFile :: Text -> Text -> Text -> FilePath -> Warwick ()
+createPageFromFile path title name fp = do
+    contents <- liftIO $ readFile fp
+    createPage path $ API.PageCreate {
+        pcTitle = title,
+        pcContents = pack contents,
+        pcPageName = name,
+        pcOptions = API.defaultPageOpts
+    }
 
 -- | 'editPage' @path update@ updates the page at @path@ with @update@.
 editPage :: Text -> API.PageUpdate -> Warwick ()
