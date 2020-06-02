@@ -319,6 +319,23 @@ Available page options ([API docs](https://warwick.ac.uk/services/its/servicessu
 - `poLayout`: the layout of an ID6 page
 - `poEditComment`: the comment to show in the edit history for this edit
 
+Pages can be added ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
+```haskell
+create :: PageCreate
+create = PageCreate {
+    pcTitle = "Page Title",
+    pcContents = "<html><body>Test</body></html>",
+    pcPageName = "testpage",
+    pcOptions = defaultPageOpts 
+}
+
+-- create a new page at /fac/sci/dcs using data from `create`
+withAPI Live config $ createPage "/fac/sci/dcs" create
+
+-- create a new page with title "Page Title" at /fac/sci/dcs with name "testpage" with the contents of test.html
+withAPI Live config $ createPageFromFile "/fac/sci/dcs" "Page Title" "testpage" "./test.html"
+```
+
 Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
 
 ```haskell
