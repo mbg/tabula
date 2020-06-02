@@ -343,6 +343,18 @@ Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessup
 withAPI Live cfg $ uploadFile "/fac/sci/dcs/test" "README" "./README.md"
 ```
 
+Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as deleted:
+```haskell
+-- marks the page at /fac/sci/dcs/test as deleted
+withAPI Live cfg $ deletePage "/fac/sci/dcs/test"
+```
+
+Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as not deleted:
+```haskell
+-- marks the page at /fac/sci/dcs/test as not deleted
+withAPI Live cfg $ restorePage "/fac/sci/dcs/test"
+```
+
 Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-page)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-file)) can be purged:
 
 ```haskell
