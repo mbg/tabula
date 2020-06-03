@@ -20,6 +20,9 @@ module Warwick.Sitebuilder (
     uploadFile,
     deletePage,
     restorePage,
+    editFileProps,
+    deleteFile,
+    restoreFile,
     purge
 ) where 
 
@@ -47,6 +50,7 @@ import qualified Warwick.Sitebuilder.PageInfo as API
 import qualified Warwick.Sitebuilder.PageUpdate as API
 import qualified Warwick.Sitebuilder.PageOptions as API
 import qualified Warwick.Sitebuilder.Page as API
+import qualified Warwick.Sitebuilder.FileOptions as API
 
 --------------------------------------------------------------------------------
 
@@ -131,6 +135,17 @@ deletePage = changeDeleteStatus True
 -- | 'restorePage' @path@ sets the deleted status to false for the page or file at @path@
 restorePage :: Text -> Warwick ()
 restorePage = changeDeleteStatus False
+
+editFileProps :: Text -> API.FileOptions -> Warwick ()
+editFileProps page opts = do
+    authData <- getAuthData
+    lift $ lift $ API.editFileProps authData (Just page) (Just "single") opts
+
+deleteFile :: Text -> Warwick ()
+deleteFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just True }
+
+restoreFile :: Text -> Warwick ()
+restoreFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just False }
 
 -- | 'purge' @path@ purges the page or file located at @path@.
 purge :: Text -> Warwick ()
