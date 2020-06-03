@@ -320,7 +320,7 @@ withAPI Live config $ createPage "/fac/sci/dcs" opts
 withAPI Live config $ createPageFromFile "/fac/sci/dcs" "Page Title" "testpage" "./test.html"
 ```
 
-- Available page options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-page-properties/)):
+Available page options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-page-properties/)):
    - `poSearchable`: whether the page is visible in search engines
    - `poVisible`: whether the page is visible in the navigation list of its parent page
    - `poSpanRHS`: whether the page should span its right hand side
@@ -355,7 +355,7 @@ opts = defaultFileOpts {
 withAPI Live cfg $ editFileProps "/fac/sci/dcs/test.pdf" opts
 ```
 
-- Available file options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-file-properties/)):
+Available file options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-file-properties/)):
    - `foTitle`: the link caption for the file
    - `foSearchable`: whether the file is visible in search engines 
    - `foVisible`: whether the file is visible in the navigation list of its parent page 
