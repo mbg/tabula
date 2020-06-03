@@ -43,7 +43,7 @@ type SitebuilderAPI =
       "atom" :>
       "atom.htm" :>
       QueryParam "page" Text :>
-      ReqBody '[ATOM] PageCreate :>
+      ReqBody '[ATOM] Page :>
       Post '[ATOM] ()
  :<|> SitebuilderAuth :>
       "api" :>
@@ -65,7 +65,7 @@ sitebuilder = Proxy
 --------------------------------------------------------------------------------
 
 editPage :: BasicAuthData -> Maybe Text -> Maybe Text -> PageUpdate -> ClientM ()
-createPage :: BasicAuthData -> Maybe Text -> PageCreate -> ClientM ()
+createPage :: BasicAuthData -> Maybe Text -> Page -> ClientM ()
 pageInfo :: BasicAuthData -> Maybe Text -> ClientM PageInfo
 purge :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 

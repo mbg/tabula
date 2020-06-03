@@ -73,7 +73,7 @@ instance HasBaseUrl SitebuilderInstance where
 
 -- | `createPage` @path pageData@ creates a page at location @path@ with data
 --   @pageData@
-createPage :: Text -> API.PageCreate -> Warwick ()
+createPage :: Text -> API.Page -> Warwick ()
 createPage path pageData = do
     authData <- getAuthData
     lift $ lift $ API.createPage authData (Just path) pageData
@@ -84,7 +84,7 @@ createPage path pageData = do
 createPageFromFile :: Text -> Text -> Text -> FilePath -> Warwick ()
 createPageFromFile path title name fp = do
     contents <- liftIO $ readFile fp
-    createPage path $ API.PageCreate {
+    createPage path $ API.Page {
         pcTitle = title,
         pcContents = pack contents,
         pcPageName = name,

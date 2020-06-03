@@ -3,7 +3,7 @@
 -- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
-module Warwick.Sitebuilder.PageCreate (PageCreate(..)) where 
+module Warwick.Sitebuilder.PageCreate (Page(..)) where 
 
 --------------------------------------------------------------------------------
 
@@ -21,15 +21,15 @@ import Warwick.Sitebuilder.PageOptions
 
 --------------------------------------------------------------------------------
 
-data PageCreate = PageCreate {
+data Page = Page {
     pcTitle :: Text,
     pcContents :: Text,
     pcPageName :: Text,
     pcOptions :: PageOptions
 } deriving Show
 
-instance MimeRender ATOM PageCreate where 
-    mimeRender _ PageCreate{..} = 
+instance MimeRender ATOM Page where 
+    mimeRender _ Page{..} = 
         renderLBS def $ 
         elementToDoc $ 
         xmlEntry $ 
