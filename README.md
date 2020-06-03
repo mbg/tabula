@@ -319,7 +319,7 @@ Available page options ([API docs](https://warwick.ac.uk/services/its/servicessu
 - `poLayout`: the layout of an ID6 page
 - `poEditComment`: the comment to show in the edit history for this edit
 
-Pages can be added ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
+Pages can be created ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
 ```haskell
 create :: PageCreate
 create = PageCreate {
