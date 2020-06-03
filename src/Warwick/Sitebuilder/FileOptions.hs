@@ -3,11 +3,21 @@
 -- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
-module Warwick.Sitebuilder.FileOptions where 
+module Warwick.Sitebuilder.FileOptions (
+    FileOptions(..),
+    defaultFileOpts,
+    fileOptsToXML
+) where 
 
 --------------------------------------------------------------------------------
 
-import Data.Text (Text)
+import Data.Maybe (catMaybes)
+import Data.List (intersperse)
+import Data.Text (Text, pack)
+import Data.XML.Types 
+
+import Text.Atom.Feed
+import Text.Atom.Feed.Export
 
 --------------------------------------------------------------------------------
 
@@ -31,3 +41,21 @@ defaultFileOpts = FileOptions {
     foKeywords = Nothing,
     foPageOrder = Nothing
 }
+
+fileOptsToXML :: FileOptions -> [Element]
+fileOptsToXML FileOptions{..} = catMaybes [
+        xmlTextContent "title" <$>
+            (TextString . pack . show <$> foTitle),
+        xmlTextContent "sitebuilder:searchable" <$> 
+            (TextString . pack . show <$> foSearchable),
+        xmlTextContent "sitebuilder:visibility" <$> 
+            (TextString . pack . show <$> foVisible),
+        xmlTextContent "sitebuilder:deleted" <$> 
+            (TextString . pack . show <$> foDeleted),
+        xmlTextContent "sitebuilder:description" <$> 
+            (TextString <$> foDescription),
+        xmlTextContent "sitebuilder:keywords" <$> 
+            (TextString .  mconcat . intersperse ", " <$> foKeywords),
+        xmlTextContent "sitebuilder:page-order" <$> 
+            (TextString . pack . show <$> foPageOrder)
+    ]
