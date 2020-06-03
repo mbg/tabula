@@ -3,7 +3,7 @@
 -- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
-module Warwick.Sitebuilder.PageCreate (Page(..)) where 
+module Warwick.Sitebuilder.Page (Page(..)) where 
 
 --------------------------------------------------------------------------------
 

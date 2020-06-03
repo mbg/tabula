@@ -18,7 +18,7 @@ import Servant.Client
 import Warwick.Sitebuilder.Atom
 import Warwick.Sitebuilder.PageInfo
 import Warwick.Sitebuilder.PageUpdate
-import Warwick.Sitebuilder.PageCreate
+import Warwick.Sitebuilder.Page
 
 --------------------------------------------------------------------------------
         
