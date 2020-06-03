@@ -19,6 +19,7 @@ import Warwick.Sitebuilder.Atom
 import Warwick.Sitebuilder.PageInfo
 import Warwick.Sitebuilder.PageUpdate
 import Warwick.Sitebuilder.Page
+import Warwick.Sitebuilder.FileOptions
 
 --------------------------------------------------------------------------------
         
@@ -63,6 +64,7 @@ type SitebuilderAPI =
       "file.htm" :>
       QueryParam "page" Text :> 
       QueryParam "type" Text :>
+      ReqBody '[ATOM] FileOptions :>
       Put '[ATOM] ()
 
 -- | A proxy value for the 'SitebuilderAPI' type.
@@ -74,9 +76,9 @@ sitebuilder = Proxy
 editPage :: BasicAuthData -> Maybe Text -> Maybe Text -> PageUpdate -> ClientM ()
 createPage :: BasicAuthData -> Maybe Text -> Page -> ClientM ()
 pageInfo :: BasicAuthData -> Maybe Text -> ClientM PageInfo
-editFileProps :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
+editFileProps :: BasicAuthData -> Maybe Text -> Maybe Text -> FileOptions -> ClientM ()
 purge :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 
-editPage :<|> createPage :<|> pageInfo :<|> editFileProps :<|> purge = client sitebuilder
+editPage :<|> createPage :<|> pageInfo :<|> purge :<|> editFileProps = client sitebuilder
 
 --------------------------------------------------------------------------------
