@@ -36,6 +36,8 @@ data FileOptions = FileOptions {
     foPageOrder :: Maybe Int
 }
 
+-- | 'defaultFileOpts' represents the default value for FileOptions (all fields
+--   are Nothing)
 defaultFileOpts :: FileOptions
 defaultFileOpts = FileOptions {
     foTitle = Nothing,
@@ -47,6 +49,7 @@ defaultFileOpts = FileOptions {
     foPageOrder = Nothing
 }
 
+-- | 'fileOptsToXML' @opts@ converts @opts@ to an array of XML elements
 fileOptsToXML :: FileOptions -> [Element]
 fileOptsToXML FileOptions{..} = catMaybes [
         xmlTextContent "title" <$>
