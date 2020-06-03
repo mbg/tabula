@@ -321,8 +321,8 @@ Available page options ([API docs](https://warwick.ac.uk/services/its/servicessu
 
 Pages can be created ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
 ```haskell
-create :: PageCreate
-create = PageCreate {
+opts :: Page
+opts = Page{
     pcTitle = "Page Title",
     pcContents = "<html><body>Test</body></html>",
     pcPageName = "testpage",
@@ -330,7 +330,7 @@ create = PageCreate {
 }
 
 -- create a new page at /fac/sci/dcs using data from `create`
-withAPI Live config $ createPage "/fac/sci/dcs" create
+withAPI Live config $ createPage "/fac/sci/dcs" opts
 
 -- create a new page with title "Page Title" at /fac/sci/dcs with name "testpage" with the contents of test.html
 withAPI Live config $ createPageFromFile "/fac/sci/dcs" "Page Title" "testpage" "./test.html"
