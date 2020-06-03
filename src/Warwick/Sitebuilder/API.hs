@@ -66,6 +66,13 @@ type SitebuilderAPI =
       QueryParam "type" Text :>
       ReqBody '[ATOM] FileOptions :>
       Put '[ATOM] ()
+ :<|> SitebuilderAuth :>
+      "edit" :>
+      "atom" :>
+      "file.htm" :>
+      QueryParam "page" Text :> 
+      QueryParam "type" Text :>
+      Delete '[ATOM] ()
 
 -- | A proxy value for the 'SitebuilderAPI' type.
 sitebuilder :: Proxy SitebuilderAPI
@@ -76,9 +83,10 @@ sitebuilder = Proxy
 editPage :: BasicAuthData -> Maybe Text -> Maybe Text -> PageUpdate -> ClientM ()
 createPage :: BasicAuthData -> Maybe Text -> Page -> ClientM ()
 pageInfo :: BasicAuthData -> Maybe Text -> ClientM PageInfo
+purgePage :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 editFileProps :: BasicAuthData -> Maybe Text -> Maybe Text -> FileOptions -> ClientM ()
-purge :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
+purgeFile :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 
-editPage :<|> createPage :<|> pageInfo :<|> purge :<|> editFileProps = client sitebuilder
+editPage :<|> createPage :<|> pageInfo :<|> purgePage :<|> editFileProps :<|> purgeFile = client sitebuilder
 
 --------------------------------------------------------------------------------

@@ -23,7 +23,8 @@ module Warwick.Sitebuilder (
     editFileProps,
     deleteFile,
     restoreFile,
-    purge
+    purgePage,
+    purgeFile
 ) where 
 
 --------------------------------------------------------------------------------
@@ -139,9 +140,9 @@ restorePage = changeDeleteStatus False
 -- | 'editFileProps' @path options@ updates the properties for the file at @path@
 --   with the changes in @options@
 editFileProps :: Text -> API.FileOptions -> Warwick ()
-editFileProps page opts = do
+editFileProps file opts = do
     authData <- getAuthData
-    lift $ lift $ API.editFileProps authData (Just page) (Just "single") opts
+    lift $ lift $ API.editFileProps authData (Just file) (Just "single") opts
 
 -- | 'deletePage' @path@ sets the deleted status to true for the file at @path@
 deleteFile :: Text -> Warwick ()
@@ -151,11 +152,17 @@ deleteFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just True 
 restoreFile :: Text -> Warwick ()
 restoreFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just False }
 
--- | 'purge' @path@ purges the page or file located at @path@.
-purge :: Text -> Warwick ()
-purge page = do 
+-- | 'purgePage' @path@ purges the page located at @path@.
+purgePage :: Text -> Warwick ()
+purgePage page = do 
     authData <- getAuthData
-    lift $ lift $ API.purge authData (Just page) (Just "single")
+    lift $ lift $ API.purgePage authData (Just page) (Just "single")
+
+-- | 'purgeFile' @path@ purges the file located at @path@.
+purgeFile :: Text -> Warwick ()
+purgeFile page = do 
+    authData <- getAuthData
+    lift $ lift $ API.purgeFile authData (Just page) (Just "single")
 
 -------------------------------------------------------------------------------
 
