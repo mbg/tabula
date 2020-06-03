@@ -3,7 +3,11 @@
 -- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
 --------------------------------------------------------------------------------
 
-module Warwick.Sitebuilder.PageOptions (PageOptions(..), optsToXML, defaultPageOpts) where 
+module Warwick.Sitebuilder.PageOptions (
+    PageOptions(..), 
+    optsToXML, 
+    defaultPageOpts
+) where 
 
 --------------------------------------------------------------------------------
 
