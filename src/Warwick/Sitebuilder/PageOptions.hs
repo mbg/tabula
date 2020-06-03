@@ -27,7 +27,7 @@ data PageOptions = PageOptions {
     poLinkCaption :: Maybe Text,
     poPageHeading :: Maybe Text,
     poTitleBarCaption :: Maybe Text,
-    poPageOrder :: Maybe Text,
+    poPageOrder :: Maybe Int,
     poCommentable :: Maybe Bool,
     poCommentsVisibleToCommentersOnly :: Maybe Bool,
     poLayout :: Maybe Text,
@@ -56,7 +56,7 @@ optsToXML PageOptions{..} = catMaybes [
         xmlTextContent "sitebuilder:title-bar-caption" <$> 
             (TextString <$> poTitleBarCaption),
         xmlTextContent "sitebuilder:page-order" <$> 
-            (TextString <$> poPageOrder),
+            (TextString . pack . show <$> poPageOrder),
         xmlTextContent "sitebuilder:commentable" <$> 
             (TextString . pack . show <$> poCommentable),
         xmlTextContent "sitebuilder:comments-visible-to-commenters-only" <$> 
