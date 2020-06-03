@@ -132,18 +132,22 @@ changeDeleteStatus deleted page = do
 deletePage :: Text -> Warwick ()
 deletePage = changeDeleteStatus True
 
--- | 'restorePage' @path@ sets the deleted status to false for the page or file at @path@
+-- | 'restorePage' @path@ sets the deleted status to false for the page at @path@
 restorePage :: Text -> Warwick ()
 restorePage = changeDeleteStatus False
 
+-- | 'editFileProps' @path options@ updates the properties for the file at @path@
+--   with the changes in @options@
 editFileProps :: Text -> API.FileOptions -> Warwick ()
 editFileProps page opts = do
     authData <- getAuthData
     lift $ lift $ API.editFileProps authData (Just page) (Just "single") opts
 
+-- | 'deletePage' @path@ sets the deleted status to true for the file at @path@
 deleteFile :: Text -> Warwick ()
 deleteFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just True }
 
+-- | 'restorePage' @path@ sets the deleted status to false for the file at @path@
 restoreFile :: Text -> Warwick ()
 restoreFile = flip editFileProps API.defaultFileOpts { API.foDeleted = Just False }
 
