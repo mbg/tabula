@@ -18,6 +18,11 @@ import Data.XML.Types
 
 import Text.Atom.Feed
 import Text.Atom.Feed.Export
+import Text.XML (renderLBS, def)
+
+import Servant.API
+
+import Warwick.Sitebuilder.Atom
 
 --------------------------------------------------------------------------------
 
@@ -59,3 +64,17 @@ fileOptsToXML FileOptions{..} = catMaybes [
         xmlTextContent "sitebuilder:page-order" <$> 
             (TextString . pack . show <$> foPageOrder)
     ]
+
+instance MimeRender ATOM FileOptions where
+    mimeRender _ fo = 
+        renderLBS def $ 
+        elementToDoc $ 
+        xmlEntry $ 
+        (nullEntry "" (TextString "") "") {
+            entryAttrs = [
+                ("xmlns:sitebuilder", [
+                    ContentText "http://go.warwick.ac.uk/elab-schemas/atom"
+                ])
+            ],
+            entryOther = fileOptsToXML fo
+        } 
