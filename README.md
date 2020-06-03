@@ -287,7 +287,7 @@ withSSO Live "[API KEY]" $ userSearch defaultSearch{ ssoSearchID = Just "1234567
 
 ## Sitebuilder API
 
-An existing Sitebuilder page can be edited ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/edit-content)). You can either specify the new contents of the file by hand (first example) or load the new contents from a file (second example):
+- An existing Sitebuilder page can be edited ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/edit-content)). You can either specify the new contents of the file by hand (first example) or load the new contents from a file (second example):
 
 ```haskell
 update :: PageUpdate
@@ -303,23 +303,23 @@ withAPI Live config $ editPage "/fac/sci/dcs/test" update
 withAPI Live config $ editPageFromFile "/fac/sci/dcs/test" "change notes" "./test.html"
 ```
 
-Available page options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-page-properties/)):
-- `poSearchable`: whether the page is visible in search engines
-- `poVisible`: whether the page is visible in the navigation list of its parent page
-- `poSpanRHS`: whether the page should span its right hand side
-- `poDeleted`: whether the page is marked as deleted
-- `poDescription`: the page's description, sometimes shown in Google results and on other Sitebuilder pages
-- `poKeywords`: keywords for a page, used for search and categorisation
-- `poLinkCaption`: the link caption for a page (as used in local navigation)
-- `poPageHeading`: the page heading
-- `poTitleBarCaption`: the title bar caption
-- `poPageOrder`: the page (sort) order for a page, with lower numbers appearing first in local navigation
-- `poCommentable`: whether the page allows comments
-- `poCommentsVisibleToCommentersOnly`: whether comments for a page should only be visible to users who can post comments
-- `poLayout`: the layout of an ID6 page
-- `poEditComment`: the comment to show in the edit history for this edit
+- Available page options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-page-properties/)):
+   - `poSearchable`: whether the page is visible in search engines
+   - `poVisible`: whether the page is visible in the navigation list of its parent page
+   - `poSpanRHS`: whether the page should span its right hand side
+   - `poDeleted`: whether the page is marked as deleted
+   - `poDescription`: the page's description, sometimes shown in Google results and on other Sitebuilder pages
+   - `poKeywords`: keywords for a page, used for search and categorisation
+   - `poLinkCaption`: the link caption for a page (as used in local navigation)
+   - `poPageHeading`: the page heading
+   - `poTitleBarCaption`: the title bar caption
+   - `poPageOrder`: the page (sort) order for a page, with lower numbers appearing first in local navigation
+   - `poCommentable`: whether the page allows comments
+   - `poCommentsVisibleToCommentersOnly`: whether comments for a page should only be visible to users who can post comments
+   - `poLayout`: the layout of an ID6 page
+   - `poEditComment`: the comment to show in the edit history for this edit
 
-Pages can be created ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
+- Pages can be created ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/create-page/)). As above you can either specificy the contents by hand or load them from a file
 ```haskell
 opts :: Page
 opts = Page{
@@ -336,33 +336,63 @@ withAPI Live config $ createPage "/fac/sci/dcs" opts
 withAPI Live config $ createPageFromFile "/fac/sci/dcs" "Page Title" "testpage" "./test.html"
 ```
 
-Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
+- Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
 
 ```haskell
 -- uploads the file README.md to the directory at /fac/sci/dcs/test using the name README
 withAPI Live cfg $ uploadFile "/fac/sci/dcs/test" "README" "./README.md"
 ```
 
-Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as deleted:
+- Properties of existing files can be edited:
+```haskell
+opts :: FileOptions
+opts = defaultFileOpts {
+   poTitle = Just "New Caption",
+   poVisible = Just False
+}
+
+-- changes /fac/sci/dcs/test.pdf to not be visible in parent navigation and to have link caption "New Caption"
+withAPI Live cfg $ editFileProps "/fac/sci/dcs/test.pdf" opts
+```
+
+- Available file options ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/change-file-properties/)):
+   - `poTitle`: the link caption for the file
+   - `poSearchable`: whether the file is visible in search engines 
+   - `poVisible`: whether the file is visible in the navigation list of its parent page 
+   - `poDeleted`: whether the file is marked as deleted
+   - `poDescription`: the file's description, used for search engines and in other Sitebuilder pages 
+   - `poKeywords`: keywords, used for search optimisation and categorisation 
+   - `poPageOrder`: the order of the file in local navigation 
+
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as deleted:
 ```haskell
 -- marks the page at /fac/sci/dcs/test as deleted
-withAPI Live cfg $ deletePage "/fac/sci/dcs/test"
+withAPI Live cfg $ delete "/fac/sci/dcs/test"
+
+-- marks the file at /fac/sci/dcs/test.pdf as deleted
+withAPI Live cfg $ delete "/fac/sci/dcs/test.pdf"
 ```
 
-Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as not deleted:
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as not deleted:
 ```haskell
 -- marks the page at /fac/sci/dcs/test as not deleted
-withAPI Live cfg $ restorePage "/fac/sci/dcs/test"
+withAPI Live cfg $ restore "/fac/sci/dcs/test"
+
+-- marks the file at /fac/sci/dcs/test.pdf as deleted
+withAPI Live cfg $ restore "/fac/sci/dcs/test.pdf"
 ```
 
-Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-page)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-file)) can be purged:
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-page)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-file)) can be purged:
 
 ```haskell
 -- purges the page at /fac/sci/dcs/test 
 withAPI Live cfg $ purge "/fac/sci/dcs/test"
+
+-- purges the file at /fac/sci/dcs/test.pdf
+withAPI Live cfg $ purge "/fac/sci/dcs/test.pdf"
 ```
 
-Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
+- Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
 
 ```haskell
 -- uploads "/Users/example/test.pdf" to "/fac/sci/dcs/test" as "test.pdf"
