@@ -91,8 +91,8 @@ instance FromJSON FileInfo where
                  <*> obj .: "url"
                  <*> obj .: "contentUpdated"
                  <*> obj .: "deleted"
-                 <*> obj .: "fileSize"
                  <*> obj .: "siteRoot"
+                 <*> obj .: "fileSize"
                  <*> obj .: "updated"
                  <*> obj .: "properties"
 
