@@ -383,4 +383,16 @@ withAPI Live cfg $ purgeFile "/fac/sci/dcs/test.pdf"
 withAPI Live cfg $ uploadFile "/fac/sci/dcs/test" "test.pdf" "/Users/example/test.pdf"
 ```
 
+- Infomation about existing pages can be retrieved ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/getting-started)):
+```haskell
+-- retrieves information about page at /fac/sci/dcs
+withAPI Live cfg $ pageInfo "/fac/sci/dcs"
+```
+
+- Information about existing files can be retreived ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/getting-started)):
+```haskell
+-- retrieves information about page at /fac/sci/dcs/test.pdf
+withAPI Live cfg $ fileInfo "/fac/sci/dcs/test.pdf"
+```
+
 For details about page/file options see [here](docs/Sitebuilder/Types.md)
