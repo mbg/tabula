@@ -10,16 +10,9 @@ module Warwick.Sitebuilder.PageInfo where
 import Data.Aeson
 import Data.Text
 
+import Warwick.Sitebuilder.PageEdit
+
 --------------------------------------------------------------------------------
-
-data PageEdit = PageEdit {
-    peUserName :: Text,
-    peDate :: Int
-} deriving Show
-
-instance FromJSON PageEdit where 
-    parseJSON = withObject "PageEdit" $ \obj ->
-        PageEdit <$> obj .: "user" <*> obj .: "date"
 
 data PageProperties = PageProperties {
     ppIncludeLegacyJS :: Bool,

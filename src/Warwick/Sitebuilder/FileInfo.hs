@@ -10,7 +10,7 @@ module Warwick.Sitebuilder.FileInfo where
 import Data.Aeson
 import Data.Text
 
-import Warwick.Sitebuilder.PageInfo (PageEdit(..))
+import Warwick.Sitebuilder.PageEdit
 
 --------------------------------------------------------------------------------
 
