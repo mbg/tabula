@@ -20,6 +20,7 @@ import Warwick.Sitebuilder.PageInfo
 import Warwick.Sitebuilder.PageUpdate
 import Warwick.Sitebuilder.Page
 import Warwick.Sitebuilder.FileOptions
+import Warwick.Sitebuilder.FileInfo
 
 --------------------------------------------------------------------------------
         
@@ -52,6 +53,11 @@ type SitebuilderAPI =
       QueryParam "page" Text :>
       Get '[JSON] PageInfo
  :<|> SitebuilderAuth :>
+      "api" :>
+      "page.json" :>
+      QueryParam "page" Text :>
+      Get '[JSON] FileInfo
+ :<|> SitebuilderAuth :>
       "edit" :>
       "atom" :>
       "atom.htm" :>
@@ -83,10 +89,11 @@ sitebuilder = Proxy
 editPage :: BasicAuthData -> Maybe Text -> Maybe Text -> PageUpdate -> ClientM ()
 createPage :: BasicAuthData -> Maybe Text -> Page -> ClientM ()
 pageInfo :: BasicAuthData -> Maybe Text -> ClientM PageInfo
+fileInfo :: BasicAuthData -> Maybe Text -> ClientM FileInfo
 purgePage :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 editFileProps :: BasicAuthData -> Maybe Text -> Maybe Text -> FileOptions -> ClientM ()
 purgeFile :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 
-editPage :<|> createPage :<|> pageInfo :<|> purgePage :<|> editFileProps :<|> purgeFile = client sitebuilder
+editPage :<|> createPage :<|> pageInfo :<|> fileInfo :<|> purgePage :<|> editFileProps :<|> purgeFile = client sitebuilder
 
 --------------------------------------------------------------------------------
