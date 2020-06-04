@@ -17,6 +17,7 @@ module Warwick.Sitebuilder (
     editPage,
     editPageFromFile,
     pageInfo,
+    fileInfo,
     uploadFile,
     deletePage,
     restorePage,
@@ -52,6 +53,7 @@ import qualified Warwick.Sitebuilder.PageUpdate as API
 import qualified Warwick.Sitebuilder.PageOptions as API
 import qualified Warwick.Sitebuilder.Page as API
 import qualified Warwick.Sitebuilder.FileOptions as API
+import qualified Warwick.Sitebuilder.FileInfo as API
 
 --------------------------------------------------------------------------------
 
@@ -120,6 +122,12 @@ pageInfo :: Text -> Warwick API.PageInfo
 pageInfo page = do 
     authData <- getAuthData
     lift $ lift $ API.pageInfo authData (Just page)
+
+-- | 'fileInfo' @path@ retrieves information about the file at @path@.
+fileInfo :: Text -> Warwick API.FileInfo
+fileInfo page = do 
+    authData <- getAuthData
+    lift $ lift $ API.fileInfo authData (Just page)
 
 -- | 'changeDeleteStatus' @deleted path@ sets the deleted status for the page at 
 --   @path@ to @deleted@
