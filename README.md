@@ -339,32 +339,41 @@ opts = defaultFileOpts {
 withAPI Live cfg $ editFileProps "/fac/sci/dcs/test.pdf" opts
 ```
 
-- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as deleted:
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as deleted:
 ```haskell
 -- marks the page at /fac/sci/dcs/test as deleted
-withAPI Live cfg $ delete "/fac/sci/dcs/test"
-
--- marks the file at /fac/sci/dcs/test.pdf as deleted
-withAPI Live cfg $ delete "/fac/sci/dcs/test.pdf"
+withAPI Live cfg $ deletePage "/fac/sci/dcs/test"
 ```
 
-- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as not deleted:
+-  Files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as deleted:
+```haskell
+-- marks the file at /fac/sci/dcs/test.pdf as deleted
+withAPI Live cfg $ deleteFile "/fac/sci/dcs/test.pdf"
+```
+
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-page-deleted/)) can be marked as not deleted:
 ```haskell
 -- marks the page at /fac/sci/dcs/test as not deleted
-withAPI Live cfg $ restore "/fac/sci/dcs/test"
-
--- marks the file at /fac/sci/dcs/test.pdf as deleted
-withAPI Live cfg $ restore "/fac/sci/dcs/test.pdf"
+withAPI Live cfg $ restorePage "/fac/sci/dcs/test"
 ```
 
-- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-page)) and files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-file)) can be purged:
+- Files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/mark-file-deleted/)) can be marked as not deleted:
+```haskell
+-- marks the file at /fac/sci/dcs/test.pdf as deleted
+withAPI Live cfg $ restoreFile "/fac/sci/dcs/test.pdf"
+```
+
+- Pages ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-page)) can be purged:
 
 ```haskell
 -- purges the page at /fac/sci/dcs/test 
-withAPI Live cfg $ purge "/fac/sci/dcs/test"
+withAPI Live cfg $ purgePage "/fac/sci/dcs/test"
+```
 
+- Files ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/purge-file)) can be purged
+```haskell
 -- purges the file at /fac/sci/dcs/test.pdf
-withAPI Live cfg $ purge "/fac/sci/dcs/test.pdf"
+withAPI Live cfg $ purgeFile "/fac/sci/dcs/test.pdf"
 ```
 
 - Files can be uploaded ([API docs](https://warwick.ac.uk/services/its/servicessupport/web/sitebuilder2/faqs/api/pages-and-files/upload-file)):
