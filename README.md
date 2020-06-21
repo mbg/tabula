@@ -396,3 +396,11 @@ withAPI Live cfg $ fileInfo "/fac/sci/dcs/test.pdf"
 ```
 
 For details about page/file options see [here](docs/Sitebuilder/Types.md)
+
+## Campus API 
+
+The endpoint for searching rooms is implemented as `listRooms` which accepts two parameters: one determining the maximum number of results that should be returned by the API and one which specifies the (partial) search query. For example, the following will retrieve up to ten results where the room names match `"CS2."`:
+
+```haskell
+withCampus Live "[API TOKEN]" $ listRooms 10 "CS2."
+```
