@@ -43,6 +43,9 @@ data TabulaResponse a
         tabulaData    :: a
     } deriving (Show)
 
+instance Functor TabulaResponse where 
+     fmap f res = res { tabulaData = f (tabulaData res)}
+
 data TabulaAssignmentResponse
     = TabulaAssignmentOK {
         tabulaAssignmentStatus :: String,
@@ -70,11 +73,31 @@ instance FromJSON TabulaAssignmentResponse where
 
 type TabulaAuth = BasicAuth "" ()
 
+newtype UsercodeList = UsercodeList { getUsercodes :: [Text] }
+    deriving (Eq, Show)
+
+instance FromJSON UsercodeList where 
+     parseJSON x = UsercodeList <$> parseJSON x
+
+instance HasPayload UsercodeList where 
+     payloadFieldName _ = "usercodes"
+
 type AdminAPI = 
       TabulaAuth :>
       "module" :>
       Capture "moduleCode" ModuleCode :>
       Get '[JSON] (TabulaResponse Module)
+ :<|> TabulaAuth :>
+      "module" :>
+      Capture "moduleCode" ModuleCode :>
+      "students" :>
+      Get '[JSON] (TabulaResponse UsercodeList)
+ :<|> TabulaAuth :>
+      "module" :>
+      Capture "moduleCode" ModuleCode :>
+      "students" :>
+      Capture "academicYear" Text :>
+      Get '[JSON] (TabulaResponse UsercodeList)
  :<|> TabulaAuth :> 
       "department" :>
       Get '[JSON] (TabulaResponse [Department])

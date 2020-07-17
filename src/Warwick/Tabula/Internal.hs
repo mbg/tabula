@@ -31,11 +31,15 @@ adminAPI :<|> courseworkAPI :<|> smallGroupAPI :<|> memberAPI :<|> timetableAPI 
 --------------------------------------------------------------------------------
 
 retrieveModule :: BasicAuthData -> ModuleCode -> ClientM (TabulaResponse Module)
+listRegisteredUsercodes :: BasicAuthData -> ModuleCode -> ClientM (TabulaResponse UsercodeList)
+listRegisteredUsercodesIn :: BasicAuthData -> ModuleCode -> Text -> ClientM (TabulaResponse UsercodeList)
 listDepartments :: BasicAuthData -> ClientM (TabulaResponse [Department])
 retrieveDepartment :: BasicAuthData -> Text -> ClientM (TabulaResponse Department)
 listDepartmentModules :: BasicAuthData -> Text -> ClientM (TabulaResponse [Module])
 
 retrieveModule :<|> 
+    listRegisteredUsercodes :<|>
+    listRegisteredUsercodesIn :<|>
     listDepartments :<|> 
     retrieveDepartment :<|> 
     listDepartmentModules = adminAPI
