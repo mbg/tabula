@@ -9,11 +9,11 @@ module Warwick.Tabula.API where
 
 import Data.Aeson
 import qualified Data.HashMap.Lazy as HM
-import qualified Data.Map as M
 import Data.ByteString as BS
 import Data.UUID.Types
 import Data.Proxy
 import Data.Text (Text)
+import Data.Time
 
 import Servant.API
 
@@ -219,7 +219,16 @@ type MemberAPI =
 
 -- | Represents the timetabling part of Tabula's API as a type.
 type TimetableAPI =
-      "termdates" :> 
+      TabulaAuth :>
+      "member" :>
+      Capture "userID" Text :>
+      "timetable" :>
+      "events" :>
+      QueryParam "academicYear" Text :>
+      QueryParam "start" Day :>
+      QueryParam "end" Day :>
+      Get '[JSON] (TabulaResponse [EventOccurrence])
+ :<|> "termdates" :> 
       Get '[JSON] (TabulaResponse [Term])
  :<|> "termdates" :> 
       Capture "academicYear" Text :> 

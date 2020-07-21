@@ -24,6 +24,7 @@ module Warwick.Tabula (
 
     withTabula,
 
+    -- * Administration & information API
     retrieveModule,
     listRegisteredUsercodes,
     listRegisteredUsercodesIn,
@@ -31,6 +32,7 @@ module Warwick.Tabula (
     retrieveDepartment,
     listDepartmentModules,
 
+    -- * Coursework API
     listAssignments,
     retrieveAssignment,
     listSubmissions,
@@ -40,10 +42,12 @@ module Warwick.Tabula (
     downloadSubmission,
     downloadSubmissionWithCallbacks,
 
+    -- * Small group teaching API
     listSmallGroupSets,
     retrieveSmallGroupAllocations,
     retrieveSmallGroupAttendance,
 
+    -- * Profiles API
     retrieveMember,
     retrieveMembers,
     listRelationships,
@@ -51,6 +55,8 @@ module Warwick.Tabula (
     listMembers,
     retrieveAttendance,
     
+    -- * Timetabling API
+    retrieveMemberEvents,
     retrieveTermDates,
     retrieveTermDatesFor,
     retrieveTermWeeks,
@@ -67,6 +73,7 @@ import Data.Text.Encoding (encodeUtf8)
 import qualified Data.HashMap.Lazy as HM
 import Data.Text (Text, pack)
 import qualified Data.Text as T
+import Data.Time
 
 import Data.List (intercalate)
 
@@ -293,6 +300,20 @@ retrieveAttendance user academicYear = do
     handle $ I.retrieveAttendance authData user (pack academicYear)
 
 -------------------------------------------------------------------------------
+
+-- | 'retrieveMemberEvents' @universityID academicYear startDate endDate@
+-- retrieves a list of 'EventOccurrence' objects for the user identified by
+-- @universityID@. If specified, @academicYear@ restricts the academic year
+-- for which events are retrieved. @startDate@ and @endDate@ can be used to
+-- further narrow down the search range.
+retrieveMemberEvents :: Text
+                     -> Maybe Text 
+                     -> Maybe Day 
+                     -> Maybe Day 
+                     -> Tabula (TabulaResponse [EventOccurrence])
+retrieveMemberEvents user academicYear start end = do 
+    authData <- getAuthData
+    handle $ I.retrieveMemberEvents authData user academicYear start end
 
 -- | `retrieveTermDates` retrieves information about an academic year's terms. 
 -- By default, information for the current academic year is returned, but the 

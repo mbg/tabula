@@ -1,7 +1,9 @@
---------------------------------------------------------------------------------
--- Haskell bindings for the University of Warwick APIs                        --
--- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Haskell bindings for the University of Warwick APIs                       --
+-------------------------------------------------------------------------------
+-- This source code is licensed under the MIT licence found in the           --
+-- LICENSE file in the root directory of this source tree.                   --
+-------------------------------------------------------------------------------
 
 module Warwick.Tabula.Payload.SmallGroup where 
 
@@ -13,9 +15,9 @@ import qualified Data.Map as M
 
 import Warwick.Common
 import Warwick.Tabula.Types
-import Warwick.Tabula.Attachment
 import Warwick.Tabula.Payload.Module
 import Warwick.Tabula.Payload.Note
+import Warwick.Tabula.Payload.Location
 
 --------------------------------------------------------------------------------
     
@@ -77,17 +79,6 @@ data Tutor = Tutor {
 instance FromJSON Tutor where 
     parseJSON = withObject "Tutor" $ \obj ->
         Tutor <$> obj .: "userId" <*> obj .:? "universityId"
-
---------------------------------------------------------------------------------
-
-data Location = Location {
-    lName :: Text,
-    lId :: Maybe Text 
-} deriving (Eq, Show)
-
-instance FromJSON Location where 
-    parseJSON = withObject "Location" $ \obj -> 
-        Location <$> obj .: "name" <*> obj .:? "locationId"
 
 --------------------------------------------------------------------------------
 

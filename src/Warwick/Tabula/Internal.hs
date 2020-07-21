@@ -10,6 +10,7 @@ module Warwick.Tabula.Internal where
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.ByteString as BS
 import Data.Text (Text)
+import Data.Time
 
 import Servant.API
 import Servant.Client
@@ -128,6 +129,14 @@ retrieveMember :<|>
 
 --------------------------------------------------------------------------------
 
+retrieveMemberEvents ::
+    BasicAuthData ->
+    Text -> 
+    Maybe Text -> 
+    Maybe Day -> 
+    Maybe Day -> 
+    ClientM (TabulaResponse [EventOccurrence])
+
 retrieveTermDates ::
     ClientM (TabulaResponse [Term])
 
@@ -147,7 +156,8 @@ retrieveTermWeeksFor ::
 retrieveHolidays ::
     ClientM (TabulaResponse [Holiday])
 
-retrieveTermDates :<|>
+retrieveMemberEvents :<|>
+    retrieveTermDates :<|>
     retrieveTermDatesFor :<|>
     retrieveTermWeeks :<|>
     retrieveTermWeeksFor :<|>
