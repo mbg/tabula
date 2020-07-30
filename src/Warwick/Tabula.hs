@@ -27,6 +27,8 @@ module Warwick.Tabula (
     retrieveModule,
     listRegisteredUsercodes,
     listRegisteredUsercodesIn,
+    listRegisteredUniversityIds,
+    listRegisteredUniversityIdsIn,
     listDepartments,
     retrieveDepartment,
     listDepartmentModules,
@@ -162,6 +164,23 @@ listRegisteredUsercodesIn mc year = do
     authData <- getAuthData
     r <- handle $ I.listRegisteredUsercodesIn authData mc year
     pure $ fmap getUsercodes r
+
+-- | 'listRegisteredUniversityIds' @code@ retrieves the University IDs of all
+-- students registered for @code@ in the current academic year.
+listRegisteredUniversityIds :: ModuleCode -> Tabula (TabulaResponse [Text])
+listRegisteredUniversityIds mc = do 
+    authData <- getAuthData
+    r <- handle $ I.listRegisteredUniversityIds authData mc True
+    pure $ fmap getUniversityIds r
+
+-- | 'listRegisteredUniversityIdsIn' @code@ retrieves the University IDs of all
+-- students registered for @code@ in the academic year given by
+-- @academicYear@.
+listRegisteredUniversityIdsIn :: ModuleCode -> Text -> Tabula (TabulaResponse [Text])
+listRegisteredUniversityIdsIn mc year = do 
+    authData <- getAuthData
+    r <- handle $ I.listRegisteredUniversityIdsIn authData mc year True
+    pure $ fmap getUniversityIds r
 
 -- | 'listDepartments' retrieves information about all departments. 
 listDepartments :: Tabula (TabulaResponse [Department])

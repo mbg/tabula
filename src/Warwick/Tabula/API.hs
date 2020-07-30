@@ -81,6 +81,15 @@ instance FromJSON UsercodeList where
 instance HasPayload UsercodeList where 
      payloadFieldName _ = "usercodes"
 
+newtype UniversityIdList = UniversityIdList { getUniversityIds :: [Text] }
+    deriving (Eq, Show)
+
+instance FromJSON UniversityIdList where 
+     parseJSON x = UniversityIdList <$> parseJSON x
+
+instance HasPayload UniversityIdList where 
+     payloadFieldName _ = "universityIds"
+
 type AdminAPI = 
       TabulaAuth :>
       "module" :>
@@ -95,8 +104,21 @@ type AdminAPI =
       "module" :>
       Capture "moduleCode" ModuleCode :>
       "students" :>
+      QueryFlag "universityIds" :>
+      Get '[JSON] (TabulaResponse UniversityIdList)
+ :<|> TabulaAuth :>
+      "module" :>
+      Capture "moduleCode" ModuleCode :>
+      "students" :>
       Capture "academicYear" Text :>
       Get '[JSON] (TabulaResponse UsercodeList)
+ :<|> TabulaAuth :>
+      "module" :>
+      Capture "moduleCode" ModuleCode :>
+      "students" :>
+      Capture "academicYear" Text :>
+      QueryFlag "universityIds" :>
+      Get '[JSON] (TabulaResponse UniversityIdList)
  :<|> TabulaAuth :> 
       "department" :>
       Get '[JSON] (TabulaResponse [Department])
