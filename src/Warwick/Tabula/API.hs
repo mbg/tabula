@@ -207,6 +207,7 @@ type MemberAPI =
  :<|> TabulaAuth :>
       "members" :> 
       QueryParams "department" Text :>
+      QueryParam "academicYear" AcademicYear :>
       QueryParam "fields" Text :>
       QueryParam "offset" Int :>
       QueryParam "limit" Int :>

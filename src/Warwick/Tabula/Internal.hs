@@ -107,6 +107,7 @@ retrieveMembers :: BasicAuthData
 listMembers ::
     BasicAuthData ->
     [Text] ->
+    Maybe AcademicYear ->
     Maybe Text ->
     Maybe Int ->
     Maybe Int ->

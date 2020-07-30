@@ -281,6 +281,7 @@ listMembers MemberSearchFilter{..} offset limit = do
     handle $ I.listMembers 
         authData 
         filterDepartment
+        filterAcademicYear
         (toSearchParam filterFields)
         (Just offset)
         (Just limit) 
