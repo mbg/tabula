@@ -38,8 +38,12 @@ data EventOccurrence = EventOccurrence {
     occurrenceType :: Text,
     -- | The start time of the event.
     occurrenceStart :: LocalTime,
+    -- | The start time of the event (incl. timezone).
+    occurrenceStartDateTime :: ZonedTime,
     -- | The end time of the event.
     occurrenceEnd :: LocalTime,
+    -- | The end time of the event (incl. timezone).
+    occurrenceEndDateTime :: ZonedTime,
     -- | An object representing the location of the event, or 'Nothing' if 
     -- there isn't one. 
     occurrenceLocation :: Maybe Location,
@@ -57,7 +61,11 @@ data EventOccurrence = EventOccurrence {
     -- - email
     -- - userType
     occurrenceStaff :: [Member]
-} deriving (Eq, Show)
+} deriving Show 
+
+-- this is probably good enough
+instance Eq EventOccurrence where 
+    a == b = occurrenceID a == occurrenceID b
 
 instance FromJSON EventOccurrence where 
     parseJSON = withObject "EventOccurrence" $ \obj -> 
@@ -67,7 +75,9 @@ instance FromJSON EventOccurrence where
                         <*> obj .: "description"
                         <*> obj .: "eventType"
                         <*> obj .: "start"
+                        <*> obj .: "startDateTime"
                         <*> obj .: "end"
+                        <*> obj .: "endDateTime"
                         <*> obj .:? "location"
                         <*> obj .:? "context"
                         <*> obj .:? "comments"
