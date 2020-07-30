@@ -1,20 +1,37 @@
+-------------------------------------------------------------------------------
+-- Haskell bindings for the University of Warwick APIs                       --
+-------------------------------------------------------------------------------
+-- This source code is licensed under the MIT licence found in the           --
+-- LICENSE file in the root directory of this source tree.                   --
+-------------------------------------------------------------------------------
 
-module Warwick.Tabula.Coursework where
+module Warwick.Tabula.Coursework (
+    StudentMember(..),
+    StudentMembership(..),
+    Assignment(..),
+    Submission(..)
+) where
+
+-------------------------------------------------------------------------------
 
 import GHC.Generics
 
 import Data.Aeson
 import qualified Data.HashMap.Lazy as HM
+import Data.Text
 
 import Warwick.Tabula.Types
 import Warwick.Tabula.Attachment
+import Warwick.Tabula.Payload.Extension
+
+-------------------------------------------------------------------------------
 
 -- | Represents an entry in a list of users who are registered for an
 -- assignment on Tabula.
 data StudentMember = StudentMember {
-    smUserName :: String,
-    smUserID   :: String
-} deriving Show
+    smUserName :: Text,
+    smUserID :: Text
+} deriving (Eq, Show)
 
 instance FromJSON StudentMember where
     parseJSON = withObject "StudentMembership" $ \v ->
@@ -108,11 +125,15 @@ data Submission = Submission {
     -- | Indicates whether plagiarisim is suspected.
     submissionSuspectPlagiarised :: Bool,
     -- | A list of attachment objects associated with this submission.
-    submissionAttachments        :: [Attachment]
-} deriving (Show, Generic)
+    submissionAttachments        :: [Attachment],
+    -- | Information about an extension, if there is one.
+    submissionExtension :: Maybe StudentAssignmentExtension
+} deriving (Eq, Show, Generic)
 
 instance FromJSON Submission where
     parseJSON = parseTabulaJSON
 
 instance HasPayload (HM.HashMap String (Maybe Submission)) where
     payloadFieldName _ = "submissions"
+
+-------------------------------------------------------------------------------
