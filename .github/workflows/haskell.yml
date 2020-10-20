@@ -55,8 +55,10 @@ jobs:
         export PATH=$HOME/.local/bin:$PATH
         stack --stack-yaml=${{ matrix.resolver }}.yaml --no-terminal build --flag uow-apis:build-exe --only-dependencies --fast
         
-    - name: Build 
+    - name: Build
+      id: build
       run: |
+        echo ::set-output name=sha_short::$(git rev-parse --short=7 ${{ github.sha }})
         export PATH=$HOME/.local/bin:$PATH
         stack --stack-yaml=${{ matrix.resolver }}.yaml --no-terminal build --flag uow-apis:build-exe --fast
         stack --stack-yaml=${{ matrix.resolver }}.yaml --no-terminal install --flag uow-apis:build-exe --fast --local-bin-path=${{ github.workspace }}/bin
@@ -67,21 +69,15 @@ jobs:
         name: uow-util-${{ matrix.resolver }}
         path: ${{ github.workspace }}/bin/uow-util
 
-    - name: get shortsha
-      id: vars
-      run: |
-       echo ::set-output name=sha_short::$(git rev-parse --short=7 ${{ github.sha }})
-
     - name: Create release 
       id: create_release
       uses: release-drafter/release-drafter@v5
       if: ${{ matrix.resolver == 'stack' && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SHORTSHA: ${{ steps.vars.outputs.sha_short }}
       with:
         tag_name: latest
-        release_name: Release $SHORTSHA
+        release_name: Release ${{ steps.build.outputs.sha_short }}
         draft: false
         prerelease: false
 
