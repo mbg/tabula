@@ -67,12 +67,23 @@ jobs:
         name: uow-util-${{ matrix.resolver }}
         path: ${{ github.workspace }}/bin/uow-util
 
+    - name: get shortsha
+      id: vars
+      run: |
+       echo ::set-output name=sha_short::$(git rev-parse --short=7 ${{ github.sha }})
+
     - name: Create release 
       id: create_release
       uses: release-drafter/release-drafter@v5
       if: ${{ matrix.resolver == 'stack' && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SHORTSHA: ${{ steps.vars.outputs.sha_short }}
+      with:
+        tag_name: latest
+        release_name: Release $SHORTSHA
+        draft: false
+        prerelease: false
 
     - name: Upload release asset
       id: upload_release_asset 
