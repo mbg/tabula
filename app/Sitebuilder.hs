@@ -10,11 +10,12 @@ module Sitebuilder ( sitebuilderMain ) where
 -------------------------------------------------------------------------------
 
 import Control.Monad (forM_)
+import Control.Monad.IO.Class 
 
 import Data.Aeson
 import Data.Maybe
 import Data.Text as T (Text, breakOnEnd, last, pack, snoc)
-import Data.Text.IO as T (readFile)
+import Data.Text.IO as T (readFile, putStrLn)
 import Data.Yaml (decodeFileThrow)
 
 import System.Exit
@@ -84,6 +85,8 @@ processPage apiCfg parent PageConfig{..} = do
         -- the properties due to an issue with how sitebuilder handles captions
         -- and creating pages
         Left _ -> do
+            T.putStrLn $ "Creating page " <> page <> " from " <> pack pcContent
+
             handleAPI $ withAPI Live apiCfg $ do
                   createPage pageParent $ 
                       Page "" contents pageName defaultPageOpts
@@ -91,14 +94,19 @@ processPage apiCfg parent PageConfig{..} = do
                       PageUpdate Nothing pcProperties
         -- if the page exists then update the page with given contents and
         -- properties
-        Right _ -> handleAPI $ withAPI Live apiCfg
-                             $ editPage page
-                             $ PageUpdate (Just contents) pcProperties
+        Right _ -> do
+            T.putStrLn $ "Updating page " <> page <> " with " <> pack pcContent
+            
+            handleAPI $ withAPI Live apiCfg
+                      $ editPage page
+                      $ PageUpdate (Just contents) pcProperties
 
     -- get all files matching the patterns given and upload them
     files <- getDirectoryFiles "." pcFiles
-    handleAPI $ withAPI Live apiCfg
-              $ forM_ files $ \f -> uploadFile page (pack f) f
+    handleAPI $ withAPI Live apiCfg $ forM_ files $ \f -> do 
+        liftIO $ T.putStrLn $ "Uploading file " <> pack f <> " to " <> page
+
+        uploadFile page (pack f) f
 
     -- process children
     let newParent = if T.last page == '/' then page else page `snoc` '/'
