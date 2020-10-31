@@ -5,8 +5,12 @@ on:
     branches: [master]
     tags:
       - 'v*'
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     branches: [master]
+    paths-ignore:
+      - 'docs/**'
 
 env:
   IMAGE_NAME: uow-util
