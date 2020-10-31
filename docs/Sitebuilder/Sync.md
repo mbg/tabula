@@ -12,7 +12,7 @@ It is important to note if you are are configuring sub-pages at the top-level, r
 ### Example Config
 
 ```yaml
-- path: /fac/sci/dcs/materials/cs141
+- page: /fac/sci/dcs/materials/cs141
   content: cs141-material.html
   properties:
     spanRHS: true
@@ -23,11 +23,11 @@ It is important to note if you are are configuring sub-pages at the top-level, r
   - files/*
   - img/image1.png
   children:
-    - path: term3/
+    - page: term3/
       source: term3.html
       properties:
         spanRHS: true
-- path: /fac/sci/dcs/materials/cs264
+- page: /fac/sci/dcs/materials/cs264
   content: cs264-material.html
 ```
 
