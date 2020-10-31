@@ -96,6 +96,7 @@ jobs:
         asset_name: uow-util
         tag: ${{ github.ref }}
         overwrite: true
+        release_name: Release ${{ steps.build.outputs.version }}
 
     - name: Build Docker image
       if: ${{ matrix.resolver == 'stack' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
