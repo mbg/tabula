@@ -67,6 +67,7 @@ library:
   source-dirs: src
   ghc-options:
   - -Wall
+  - -Werror=missing-fields
 
 executables:
   uow-util:
