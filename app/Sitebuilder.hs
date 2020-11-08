@@ -40,6 +40,8 @@ data PageConfig = PageConfig {
     pcPage :: Text,
     -- | The path to the contents for the page
     pcContent :: FilePath,
+    -- | The path of the RHS contents for the page
+    pcRhsContent :: Maybe FilePath,
     -- | The properties for the page
     pcProperties :: PageOptions,
     -- | The files to upload under this page. Note that all files are flattened
@@ -53,6 +55,7 @@ instance FromJSON PageConfig where
     parseJSON = withObject "PageConfig" $ \v -> 
         PageConfig <$> v .: "page"
                    <*> v .: "content"
+                   <*> v .:? "rhsContent"
                    <*> v .:? "properties" .!= defaultPageOpts
                    <*> v .:? "files" .!= []
                    <*> v .:? "children" .!= []
@@ -79,6 +82,11 @@ processPage apiCfg parent PageConfig{..} = do
     -- read the contents of the file specified
     contents <- T.readFile pcContent
 
+    -- read the RHS contents, if specified
+    mRhsContents <- case pcRhsContent of 
+        Nothing -> pure Nothing 
+        Just rhsFile -> Just <$> T.readFile rhsFile
+
     case info of
         -- if the page doesn't exist then create the page with the given content
         -- and properties. This makes a second edit request to the page to set
@@ -89,9 +97,9 @@ processPage apiCfg parent PageConfig{..} = do
 
             handleAPI $ withAPI Live apiCfg $ do
                   createPage pageParent $ 
-                      Page "" contents pageName defaultPageOpts
+                      Page "" contents mRhsContents pageName defaultPageOpts
                   editPage page $ 
-                      PageUpdate Nothing pcProperties
+                      PageUpdate Nothing mRhsContents pcProperties
         -- if the page exists then update the page with given contents and
         -- properties
         Right _ -> do
@@ -99,7 +107,7 @@ processPage apiCfg parent PageConfig{..} = do
             
             handleAPI $ withAPI Live apiCfg
                       $ editPage page
-                      $ PageUpdate (Just contents) pcProperties
+                      $ PageUpdate (Just contents) mRhsContents pcProperties
 
     -- get all files matching the patterns given and upload them
     files <- getDirectoryFiles "." pcFiles

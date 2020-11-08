@@ -1,7 +1,9 @@
---------------------------------------------------------------------------------
--- Haskell bindings for the University of Warwick APIs                        --
--- Copyright 2019 Michael B. Gale (m.gale@warwick.ac.uk)                      --
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Haskell bindings for the University of Warwick APIs                       --
+-------------------------------------------------------------------------------
+-- This source code is licensed under the MIT licence found in the           --
+-- LICENSE file in the root directory of this source tree.                   --
+-------------------------------------------------------------------------------
 
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -93,9 +95,10 @@ createPage path pageData = do
 createPageFromFile :: Text -> Text -> Text -> FilePath -> Warwick ()
 createPageFromFile path title name fp = do
     contents <- liftIO $ readFile fp
-    createPage path $ API.Page {
+    createPage path $ API.Page{
         pcTitle = title,
         pcContents = pack contents,
+        pcRhsContents = Nothing,
         pcPageName = name,
         pcOptions = API.defaultPageOpts
     }
@@ -114,6 +117,7 @@ editPageFromFile page comment fp = do
     contents <- liftIO $ readFile fp
     editPage page API.PageUpdate{
         puContents = Just $ pack contents,
+        puRhsContents = Nothing,
         puOptions = API.defaultPageOpts { API.poEditComment = Just comment }
     }
 
@@ -135,7 +139,11 @@ changeDeleteStatus :: Bool -> Text -> Warwick ()
 changeDeleteStatus deleted page = do
     authData <- getAuthData
     lift $ lift $ API.editPage authData (Just page) (Just "single") $ 
-        API.PageUpdate Nothing $ API.defaultPageOpts { API.poDeleted = Just deleted }
+        API.PageUpdate{
+            puContents = Nothing,
+            puRhsContents = Nothing,
+            puOptions = API.defaultPageOpts{ API.poDeleted = Just deleted }
+        }
 
 -- | 'deletePage' @path@ sets the deleted status to true for the page at @path@
 deletePage :: Text -> Warwick ()

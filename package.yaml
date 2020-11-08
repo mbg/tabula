@@ -26,6 +26,7 @@ flags:
 dependencies:
 - base
 - bytestring
+- data-default
 - text
 - time
 - iso8601-time
