@@ -406,6 +406,7 @@ withSSO Live "[API KEY]" $ userSearch defaultSearch{ ssoSearchID = Just "1234567
 update :: PageUpdate
 update = PageUpdate {
     puContents = "<html><body>Test</body></html>",
+    puRhsContent = Nothing,
     puOptions = defaultPageOpts { poEditComment = Just "change notes" }
 }
 
@@ -422,6 +423,7 @@ opts :: Page
 opts = Page{
     pcTitle = "Page Title",
     pcContents = "<html><body>Test</body></html>",
+    pcRhsContents = Nothing,
     pcPageName = "testpage",
     pcOptions = defaultPageOpts 
 }
@@ -443,7 +445,7 @@ withAPI Live cfg $ uploadFile "/fac/sci/dcs/test" "README" "./README.md"
 - Properties of existing files can be edited:
 ```haskell
 opts :: FileOptions
-opts = defaultFileOpts {
+opts = defaultFileOpts{
    foTitle = Just "New Caption",
    foVisible = Just False
 }
