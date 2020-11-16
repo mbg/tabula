@@ -96,11 +96,9 @@ processPage apiCfg parent PageConfig{..} = do
             T.putStrLn $ "Creating page " <> page <> " from " <> pack pcContent
                       <> maybe "" (" and " <>) (pack <$> pcRhsContent)
 
-            handleAPI $ withAPI Live apiCfg $ do
-                  createPage pageParent $ 
-                      Page "" contents mRhsContents pageName defaultPageOpts
-                  editPage page $ 
-                      PageUpdate Nothing mRhsContents pcProperties
+            handleAPI $ withAPI Live apiCfg 
+                      $ createPage pageParent 
+                      $ Page "" contents mRhsContents pageName pcProperties
         -- if the page exists then update the page with given contents and
         -- properties
         Right _ -> do
