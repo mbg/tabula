@@ -15,9 +15,11 @@ module Warwick.Sitebuilder (
     SitebuilderInstance(..),
 
     createPage,
+    createPageWithRHSFromFile,
     createPageFromFile,
     editPage,
     editPageFromFile,
+    editPageRHSFromFile,
     pageInfo,
     fileInfo,
     uploadFile,
@@ -89,6 +91,23 @@ createPage path pageData = do
     authData <- getAuthData
     lift $ lift $ API.createPage authData (Just path) pageData
 
+-- | `createPageWithRHSFromFile` @path title pageName filepath rhsFilepath@ 
+-- creates a page @pageName@ at the location @path@ with title @title@ and  
+-- the contents of @filePath@ as the page contents and the contents of
+-- @rhsFilepath@ as the RHS contents of the page.
+createPageWithRHSFromFile :: Text -> Text -> Text -> FilePath -> FilePath 
+                          -> Warwick ()
+createPageWithRHSFromFile path title name fp rhsfp = do
+    contents <- liftIO $ readFile fp
+    rhsContents <- liftIO $ readFile rhsfp
+    createPage path $ API.Page{
+        pcTitle = title,
+        pcContents = pack contents,
+        pcRhsContents = Just $ pack rhsContents,
+        pcPageName = name,
+        pcOptions = API.defaultPageOpts
+    }
+
 -- | `createPageFromFile` @path title pageName filepath@ creates a page @pageName@
 --   at the location @path@ with title @title@ and the contents of @filePath@ as 
 --   the page contents
@@ -118,6 +137,18 @@ editPageFromFile page comment fp = do
     editPage page API.PageUpdate{
         puContents = Just $ pack contents,
         puRhsContents = Nothing,
+        puOptions = API.defaultPageOpts { API.poEditComment = Just comment }
+    }
+
+-- | 'editPageRHSFromFile' @page comment filepath@ updates the RHS of @page@  
+-- with the contents of the file located at @filepath@. @comment@ is used as 
+-- the change note for this edit.
+editPageRHSFromFile :: Text -> Text -> FilePath -> Warwick ()
+editPageRHSFromFile page comment fp = do 
+    contents <- liftIO $ readFile fp
+    editPage page API.PageUpdate{
+        puContents = Nothing,
+        puRhsContents = Just $ pack contents,
         puOptions = API.defaultPageOpts { API.poEditComment = Just comment }
     }
 
