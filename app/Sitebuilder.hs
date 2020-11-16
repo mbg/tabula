@@ -94,6 +94,7 @@ processPage apiCfg parent PageConfig{..} = do
         -- and creating pages
         Left _ -> do
             T.putStrLn $ "Creating page " <> page <> " from " <> pack pcContent
+                      <> maybe "" (" and " <>) (pack <$> pcRhsContent)
 
             handleAPI $ withAPI Live apiCfg $ do
                   createPage pageParent $ 
@@ -104,6 +105,7 @@ processPage apiCfg parent PageConfig{..} = do
         -- properties
         Right _ -> do
             T.putStrLn $ "Updating page " <> page <> " with " <> pack pcContent
+                      <> maybe "" (" and " <>) (pack <$> pcRhsContent)
             
             handleAPI $ withAPI Live apiCfg
                       $ editPage page
