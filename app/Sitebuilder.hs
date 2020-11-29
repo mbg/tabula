@@ -9,16 +9,18 @@ module Sitebuilder ( sitebuilderMain ) where
 
 -------------------------------------------------------------------------------
 
-import Control.Monad (forM_)
+import Control.Monad
 import Control.Monad.IO.Class 
 
-import Data.Aeson
+import Data.Aeson hiding (encodeFile)
 import Data.Maybe
-import Data.Text as T (Text, breakOnEnd, last, pack, snoc)
-import Data.Text.IO as T (readFile, putStrLn)
-import Data.Yaml (decodeFileThrow)
+import Data.Text as T (Text, breakOnEnd, last, pack, unpack, snoc)
+import qualified Data.Text.IO as T
+import Data.Yaml (decodeFileThrow, encodeFile)
 
+import System.Directory
 import System.Exit
+import System.FilePath
 import System.FilePattern (FilePattern)
 import System.FilePattern.Directory (getDirectoryFiles) 
 import System.IO
@@ -29,6 +31,7 @@ import Warwick.Sitebuilder
 import Warwick.Sitebuilder.Page (Page(..))
 import Warwick.Sitebuilder.PageOptions (PageOptions(..), defaultPageOpts)
 import Warwick.Sitebuilder.PageUpdate (PageUpdate(..))
+import Warwick.Sitebuilder.PageInfo
 
 import CmdArgs
 
@@ -50,6 +53,16 @@ data PageConfig = PageConfig {
     -- | The children of the page
     pcChildren :: [PageConfig]
 } deriving (Eq, Show)
+
+instance ToJSON PageConfig where 
+    toJSON PageConfig{..} =
+        object [ "page" .= pcPage 
+               , "content" .= pcContent
+               , "rhsContent" .= pcRhsContent
+               , "properties" .= pcProperties
+               , "files" .= pcFiles
+               , "children" .= pcChildren
+               ]
 
 instance FromJSON PageConfig where
     parseJSON = withObject "PageConfig" $ \v -> 
@@ -122,12 +135,78 @@ processPage apiCfg parent PageConfig{..} = do
 
 -------------------------------------------------------------------------------
 
-handleAPI :: Show e => IO (Either e a) -> IO ()
+pageInfo2options :: PageInfo -> PageOptions
+pageInfo2options PageInfo{..} = PageOptions{
+    poSearchable = Just $ ppAllowSearchEngines pageProperties,
+    poVisible = Just pagePubliclyVisible,
+    poSpanRHS = Just $ ppSpanRhs pageProperties,
+    poDeleted = Just pageDeleted,
+    poDescription = pageDescription,
+    poKeywords = Just pageKeywords,
+    poLinkCaption = pageLinkCaption,
+    poPageHeading = pageHeading,
+    poTitleBarCaption = pageShortTitle,
+    poPageOrder = Just $ ppPageOrder pageProperties,
+    poCommentable = Nothing,
+    poCommentsVisibleToCommentersOnly = Nothing,
+    poLayout = Nothing,
+    poEditComment = Nothing
+}
+
+downloadPage :: APIConfig -> FilePath -> FilePath -> Text 
+             -> IO (Maybe PageConfig) 
+downloadPage config root outDir path = do 
+    -- retrieve information about the page
+    info <- handleAPI $ withAPI Live config $ pageInfo path
+
+    -- retrieve the page html if it is a sitebuilder html page
+    if pageType info == "html"
+    then do 
+        -- create the output directory if it does not exist yet
+        createDirectoryIfMissing True outDir
+        
+        page <- handleAPI $ withAPI Live config $ getPage path 
+
+        -- write the main body html
+        let htmlPath = outDir </> unpack (pcPageName page) <.> "html"
+        T.writeFile htmlPath (pcContents page)
+
+        -- if there is a RHS, write that too
+        mRhsPath <- case pcRhsContents page of 
+            Nothing -> pure Nothing
+            Just rhs -> do
+                let rhsPath = outDir </> unpack (pcPageName page <> "-rhs") <.> "html"
+                T.writeFile rhsPath rhs
+                pure $ Just rhsPath
+
+        children <- forM (pageChildren info) $ \child -> do 
+            T.putStrLn child
+            let (pageParent, pageName) = case breakOnEnd "/" child of
+                    (pageNoSlash, "") -> breakOnEnd "/" pageNoSlash
+                    x -> x
+
+            downloadPage config root (outDir </> unpack pageName) child
+
+        pure $ Just $ PageConfig{
+            pcPage = path,
+            pcContent = makeRelative root htmlPath,
+            pcRhsContent = makeRelative root <$> mRhsPath,
+            pcProperties = pageInfo2options info,
+            pcFiles = ["files/*"],
+            pcChildren = catMaybes children
+        }
+    else if pageType info == "binary"
+         then pure $ Nothing -- TODO: download binary file
+         else pure $ Nothing
+
+-------------------------------------------------------------------------------
+
+handleAPI :: Show e => IO (Either e a) -> IO a
 handleAPI m = m >>= \case 
     Left err -> do 
         hPutStrLn stderr (show err)
         exitWith (ExitFailure (-1)) 
-    Right _ -> pure ()
+    Right x -> pure x
 
 sitebuilderMain :: APIConfig -> SitebuilderOpts -> IO ()
 sitebuilderMain config opts = do 
@@ -150,5 +229,10 @@ sitebuilderMain config opts = do
             -- process every page specified in the config (children are
             -- processed recursively by `processPage`)
             mapM_ (processPage config "") pages
+        DownloadSite{..} -> do
+            mConfig <- downloadPage config cOutputDir cOutputDir cPage
+            case mConfig of 
+                Nothing -> pure ()
+                Just cfg -> encodeFile (cOutputDir </> "sitebuilder.yaml") cfg
 
 -------------------------------------------------------------------------------

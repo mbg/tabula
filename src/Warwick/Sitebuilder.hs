@@ -20,6 +20,7 @@ module Warwick.Sitebuilder (
     editPage,
     editPageFromFile,
     editPageRHSFromFile,
+    getPage,
     pageInfo,
     fileInfo,
     uploadFile,
@@ -151,6 +152,12 @@ editPageRHSFromFile page comment fp = do
         puRhsContents = Just $ pack contents,
         puOptions = API.defaultPageOpts { API.poEditComment = Just comment }
     }
+
+-- | 'getPage' @path@ retrieves the contents of the page at @path@.
+getPage :: Text -> Warwick API.Page 
+getPage page = do 
+    authData <- getAuthData
+    lift $ lift $ API.getPage authData (Just page) (Just "single")
 
 -- | 'pageInfo' @path@ retrieves information about the page at @path@.
 pageInfo :: Text -> Warwick API.PageInfo

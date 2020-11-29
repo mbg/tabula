@@ -48,6 +48,13 @@ type SitebuilderAPI =
       ReqBody '[ATOM] Page :>
       Post '[ATOM] ()
  :<|> SitebuilderAuth :>
+      "edit" :>
+      "atom" :>
+      "atom.htm" :>
+      QueryParam "page" Text :>
+      QueryParam "type" Text :>
+      Get '[ATOM] Page
+ :<|> SitebuilderAuth :>
       "api" :>
       "page.json" :>
       QueryParam "page" Text :>
@@ -88,12 +95,13 @@ sitebuilder = Proxy
 
 editPage :: BasicAuthData -> Maybe Text -> Maybe Text -> PageUpdate -> ClientM ()
 createPage :: BasicAuthData -> Maybe Text -> Page -> ClientM ()
+getPage :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM Page
 pageInfo :: BasicAuthData -> Maybe Text -> ClientM PageInfo
 fileInfo :: BasicAuthData -> Maybe Text -> ClientM FileInfo
 purgePage :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 editFileProps :: BasicAuthData -> Maybe Text -> Maybe Text -> FileOptions -> ClientM ()
 purgeFile :: BasicAuthData -> Maybe Text -> Maybe Text -> ClientM ()
 
-editPage :<|> createPage :<|> pageInfo :<|> fileInfo :<|> purgePage :<|> editFileProps :<|> purgeFile = client sitebuilder
+editPage :<|> createPage :<|> getPage :<|> pageInfo :<|> fileInfo :<|> purgePage :<|> editFileProps :<|> purgeFile = client sitebuilder
 
 --------------------------------------------------------------------------------
