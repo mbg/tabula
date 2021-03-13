@@ -11,6 +11,7 @@ import Data.ByteString (ByteString)
 import Data.ByteString.Char8 (unpack)
 import Data.ByteString.Lazy (toStrict)
 import Data.Char (toLower)
+import Data.List.NonEmpty (fromList)
 import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
 
@@ -26,7 +27,7 @@ import Xeno.DOM
 data XML 
 
 instance Accept XML where 
-    contentType _ = "text" // "xml"
+    contentTypes _ = fromList ["application" // "xml", "text" // "xml"]
 
 --------------------------------------------------------------------------------
 
