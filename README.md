@@ -2,6 +2,18 @@
 
 A client program (`uow-util`) and Haskell library (`uow-apis`) for various University of Warwick APIs. Please [open an issue](https://github.com/mbg/uow-apis/issues/new) if there is an endpoint or a feature you require, but that is not yet supported. Pull requests are also welcome.
 
+## Contents
+
+1. [Usage](#usage)
+1. [Tabula API](#tabula-api)
+1. [Peoplesearch API](#peoplesearch-api)
+1. [MyWarwick API](#my-warwick-api)
+1. [SSO API](#sso-api)
+1. [Sitebuilder API](#sitebuilder-api)
+1. [Campus API](#campus-api)
+1. [Postroom API](#postroom-api)
+1. [AEP API](#aep-api)
+
 ## Usage
 
 Pre-built binaries for linux (x86-64) can be downloaded from the [releases page](https://github.com/mbg/uow-apis/releases) and [Docker images are also available](https://github.com/mbg/uow-apis/packages/468684).
@@ -540,4 +552,13 @@ withAPI Live cfg getMyAddresses
 - The post items for the current user can be retrieved:
 ```haskell
 withAPI Live cfg getMyItems
+```
+
+## AEP API
+
+**Please note this endpoint is not an official API endpoint, and its use is not supported. Do not contact ITS about any issues regarding this endpoint. Note that using this endpoint directly lacks the enhanced logging provided by the AEP (such as logging the start time of uploads, and logging failed upload attempts) and all use of it is at your own risk. You should always be prepared to upload normally via the AEP interface.**
+
+- A file can be uploaded to an assessment. The last parameter determines if existing files with the same name should be overwritten or not:
+```haskell
+withAEP Live sscCookie $ uploadFile assessmentUUID "path/to/file" False
 ```

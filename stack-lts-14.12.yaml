@@ -8,3 +8,4 @@ packages:
 # we skip straight to feed-1.3 to avoid that change
 extra-deps:
 - feed-1.3.0.1
+- servant-multipart-0.12@sha256:aa81dd0478270ade4a21b75611d5bc9cce8107df2e89c37b9964a3421629825d,2761

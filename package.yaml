@@ -51,6 +51,9 @@ dependencies:
 - uuid-types
 - mtl
 - exceptions
+- filepath
+- http-api-data
+- servant-multipart
 
 default-extensions:
 - OverloadedStrings
@@ -80,7 +83,6 @@ executables:
       - uow-apis
       - extra
       - optparse-applicative
-      - filepath
       - directory
       - ascii-progress
       - yaml

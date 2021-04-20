@@ -22,7 +22,6 @@ jobs:
         resolver: 
           - stack
           - stack-lts-14.12
-          - stack-lts-13.26
 
     runs-on: ubuntu-latest
 
