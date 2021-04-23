@@ -13,6 +13,7 @@ A client program (`uow-util`) and Haskell library (`uow-apis`) for various Unive
 1. [Campus API](#campus-api)
 1. [Postroom API](#postroom-api)
 1. [AEP API](#aep-api)
+1. [Exams API](docs/exams.md)
 
 ## Usage
 
