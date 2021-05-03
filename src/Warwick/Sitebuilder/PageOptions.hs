@@ -39,6 +39,24 @@ data PageOptions = PageOptions {
     poEditComment :: Maybe Text
 } deriving (Eq, Show)
 
+instance ToJSON PageOptions where 
+    toJSON PageOptions{..} =
+        object [ "searchable" .= poSearchable
+               , "visible" .= poVisible
+               , "spanRHS" .= poSpanRHS
+               , "deleted" .= poDeleted
+               , "description" .= poDescription
+               , "keywords" .= poKeywords
+               , "linkCaption" .= poLinkCaption
+               , "pageHeading" .= poPageHeading
+               , "titleBarCaption" .= poTitleBarCaption
+               , "pageOrder" .= poPageOrder
+               , "commentable" .= poCommentable
+               , "commentsVisibleToCommentersOnly" .= poCommentsVisibleToCommentersOnly
+               , "layout" .= poLayout
+               , "editComment" .= poEditComment
+               ]
+
 instance FromJSON PageOptions where
     parseJSON = withObject "PageOptions" $ \v ->
         PageOptions <$> v .:? "searchable"

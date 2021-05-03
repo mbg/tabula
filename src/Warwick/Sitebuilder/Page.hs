@@ -10,12 +10,14 @@ module Warwick.Sitebuilder.Page (Page(..)) where
 --------------------------------------------------------------------------------
 
 import Data.Default
-import Data.Text (Text)
+import Data.Maybe
+import Data.Text (Text, pack)
 import Data.XML.Types 
 
 import Text.Atom.Feed
 import Text.Atom.Feed.Export
-import Text.XML (renderLBS)
+import Text.Atom.Feed.Import
+import Text.XML (renderLBS, parseLBS, toXMLDocument)
 
 import Servant.API
 
@@ -60,5 +62,34 @@ instance MimeRender ATOM Page where
                         } 
                 in maybe other (: other) rhsElement 
         } 
+
+sbNodes :: Text -> [Element] -> [Element]
+sbNodes x = filter ((==) x . nameLocalName . elementName)
+
+sbNode :: Text -> [Element] -> Maybe Element 
+sbNode x = listToMaybe . sbNodes x 
+
+instance MimeUnrender ATOM Page where 
+    mimeUnrender _ lbs = case parseLBS def lbs of 
+        Left err -> Left $ show err 
+        Right doc -> 
+            let root = documentRoot $ toXMLDocument doc
+            in case pEntry root of 
+                Just entry -> Right $ Page{
+                    pcTitle = let (TextString xs) = entryTitle entry in xs,
+                    pcContents = case entryContent entry of
+                        Just (HTMLContent cs) -> cs
+                        _ -> "",
+                    pcRhsContents = do 
+                        e <- sbNode "rhs-content" (children root) 
+                        HTMLContent cs <- pContent e 
+                        pure cs, 
+                    pcPageName = fromMaybe "" $ do 
+                        e <- sbNode "page-name" (children root) 
+                        TextContent cs <- pContent e 
+                        pure cs,
+                    pcOptions = defaultPageOpts
+                }
+                _ -> Left "Not a valid ATOM entry"
 
 --------------------------------------------------------------------------------

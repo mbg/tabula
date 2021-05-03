@@ -31,29 +31,29 @@ instance FromJSON PageProperties where
         PageProperties <$> obj .: "includeLegacyJavascript"
                        <*> obj .: "showInLocalNavigation"
                        <*> obj .: "pageOrder"
-                       <*> obj .: "hasThumbnail"
+                       <*> obj .:? "hasThumbnail" .!= False
                        <*> obj .: "allowSearchEngines"
                        <*> obj .: "escapeHtml"
                        <*> obj .: "supportsPagesToGo"
-                       <*> obj .: "spanRhs"
+                       <*> obj .:? "spanRhs" .!= False
                        <*> obj .: "deferJs"
 
 data PageInfo = PageInfo {
     pageID :: Text,
     pageParent :: Text,
-    pageLinkCaption :: Text, 
+    pageLinkCaption :: Maybe Text, 
     pageKeywords :: [Text],
     pageCanEdit :: Bool,
     pageCanAdmin :: Bool,
     pageDescription :: Maybe Text,
-    pageShortTitle :: Text, 
-    pageMimeType :: Text,
+    pageShortTitle :: Maybe Text, 
+    pageMimeType :: Maybe Text,
     pageEdited :: PageEdit, 
     pagePath :: Text, 
-    pageHeading :: Text,
+    pageHeading :: Maybe Text,
     pageType :: Text, 
     pageChildren :: [Text],
-    pageContentType :: Text,
+    pageContentType :: Maybe Text,
     pagePubliclyVisible :: Bool,
     pageContact :: Text,
     pageCreator :: Text,
@@ -73,19 +73,19 @@ instance FromJSON PageInfo where
     parseJSON = withObject "PageInfo" $ \obj ->
         PageInfo <$> obj .: "id"
                  <*> obj .: "parent"
-                 <*> obj .: "linkCaption"
+                 <*> obj .:? "linkCaption"
                  <*> obj .: "keywords"
                  <*> obj .: "canEdit"
                  <*> obj .: "canAdmin"
                  <*> obj .:? "description"
-                 <*> obj .: "shortTitle"
-                 <*> obj .: "mimeType"
+                 <*> obj .:? "shortTitle"
+                 <*> obj .:? "mimeType"
                  <*> obj .: "editedUpdated"
                  <*> obj .: "path"
-                 <*> obj .: "pageHeading"
+                 <*> obj .:? "pageHeading"
                  <*> obj .: "pageType"
                  <*> obj .: "children"
-                 <*> obj .: "contentType"
+                 <*> obj .:? "contentType"
                  <*> obj .: "publiclyVisible"
                  <*> obj .: "pageContact"
                  <*> obj .: "creator"
